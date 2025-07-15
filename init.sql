@@ -1,4 +1,4 @@
--- Empty file (to be filled)
+
 CREATE TABLE EscapeRoom (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
@@ -31,7 +31,6 @@ CREATE TABLE ClueObject (
     solved BOOLEAN,
     reward_id INT,
     room_id INT,
-    FOREIGN KEY (reward_id) REFERENCES Reward(id),
     FOREIGN KEY (room_id) REFERENCES Room(id)
 );
 
