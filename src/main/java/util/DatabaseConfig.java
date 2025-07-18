@@ -9,7 +9,7 @@ public class DatabaseConfig {
 
     public DatabaseConfig() {
         this.dotenv = Dotenv.configure()
-//              .directory("util") // Relative route to .env
+//              .directory("src/main/java/util/.env"") // Relative route to .env
                 .directory("C:\\Users\\elyri\\IdeaProjects\\S3_03_Scaperoom")
                 .filename(".env")     // Por defecto es ".env", puedes omitir esta línea
                 .load();
@@ -40,8 +40,9 @@ public class DatabaseConfig {
             throw new SQLException("Error: The database password (MYSQL_PASSWORD) is not defined in the .env file.");
         }
 
-        System.out.println("DEBUG - Trying to connect to DB URL: " + url);
-        System.out.println("DEBUG - DB User: " + user);
+        //Cambiar por testing
+//        System.out.println("DEBUG - Trying to connect to DB URL: " + url);
+//        System.out.println("DEBUG - DB User: " + user);
 
         return DriverManager.getConnection(url, user, password);
     }
