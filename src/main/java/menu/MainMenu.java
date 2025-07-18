@@ -6,6 +6,7 @@ import model.Room;
 import util.DatabaseConnection;
 import util.EnvLoader;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -24,12 +25,14 @@ public class MainMenu {
     public void start() {
         int input;
         try {
+            // Puedes hacer una prueba de conexión inicial aquí si lo deseas.
+            // DatabaseConnection.getInstance().getConnection();
+
             do {
-                System.out.println("\n--- Main Menu Escape Room ---");
-                System.out.println("1. CRUD Operations for Rooms");
-                System.out.println("2. Another CRUD Operations");
-                System.out.println("0. Exit");
-                System.out.print("Select a valid menu option: ");
+                System.out.println("\n--- Menú Principal Escape Room ---");
+                System.out.println("1. Operaciones CRUD de Rooms");
+                System.out.println("0. Salir");
+                System.out.print("Elige una opción: ");
                 input = scanner.nextInt();
                 scanner.nextLine(); // Consumir la nueva línea
 
@@ -37,21 +40,18 @@ public class MainMenu {
                     case 1:
                         handleRoomCrud();
                         break;
-                    case 2:
-                        //AnotherOption();
-                        break;
                     case 0:
-                        System.out.println(" Bye bye! ");
+                        System.out.println("Saliendo de la aplicación. ¡Hasta pronto!");
                         break;
                     default:
-                        System.out.println("Invalid option, try again.");
+                        System.out.println("Opción no válida. Intenta de nuevo.");
                 }
             } while (input != 0);
 
-        } catch (RuntimeException e) { // Captura excepciones lanzadas por EnvLoader o DatabaseConnection
+        } catch (RuntimeException e) {
             System.err.println("Error fatal al iniciar la aplicación: " + e.getMessage());
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (Exception e) { // Captura cualquier otra excepción no SQL o Runtime
             System.err.println("Se produjo un error inesperado en el menú principal: " + e.getMessage());
             e.printStackTrace();
         } finally {
@@ -62,35 +62,37 @@ public class MainMenu {
         }
     }
 
-    // Métodos para manejar los submenús (copiados de MainApp anterior)
     private void handleRoomCrud() {
-        int roomInput;
+        int roomChoice;
         do {
             System.out.println("\n--- CRUD de Rooms ---");
-            System.out.println("1. Create Room");
-            System.out.println("2. Search Room by ID");
-            System.out.println("3. List all Rooms");
-            System.out.println("4. Update Room");
-            System.out.println("5. Delete Room");
-            System.out.println("0. Back to principal menu");
-            System.out.print("Select a valid Rooms menu option: ");
-            roomInput = scanner.nextInt();
-            scanner.nextLine(); // Consumir nueva línea
+            System.out.println("1. Crear Room"); // Cambiado a Crear
+            System.out.println("2. Obtener Room por ID");
+            System.out.println("3. Listar todas las Rooms");
+            System.out.println("4. Actualizar Room");
+            System.out.println("5. Eliminar Room");
+            System.out.println("0. Volver al menú principal");
+            System.out.print("Elige una opción para Rooms: ");
+            roomChoice = scanner.nextInt();
+            scanner.nextLine();
 
             try {
-                switch (roomInput) {
-                    case 1: // Guardar Room
+                switch (roomChoice) {
+                    case 1: // Crear Room
                         System.out.print("Tema: "); String theme = scanner.nextLine();
-                        System.out.print("Room difficulty level: "); int difficulty_level = scanner.nextInt();
+                        System.out.print("Nivel de Dificultad (1-10): "); int difficulty = scanner.nextInt();
                         scanner.nextLine(); // Consumir nueva línea
-                        roomDao.createRoom(new Room(theme, difficulty_level));
+                        roomDao.createRoom(new Room(theme, difficulty)); // Usar createRoom
                         break;
                     case 2: // Obtener por ID
                         System.out.print("ID de la Room a obtener: "); int idGet = scanner.nextInt();
                         scanner.nextLine();
-                        Optional<Room> room = roomDao.getRoomById(idGet);
-                        if (room != null) System.out.println("Room encontrada: " + room);
-                        else System.out.println("Room con ID " + idGet + " no encontrada.");
+                        Optional<Room> optionalRoom = roomDao.getRoomById(idGet); // Recibe un Optional
+                        if (optionalRoom.isPresent()) { // Verifica si hay un valor presente
+                            System.out.println("Room encontrada: " + optionalRoom.get()); // Obtiene el valor
+                        } else {
+                            System.out.println("Room con ID " + idGet + " no encontrada.");
+                        }
                         break;
                     case 3: // Listar todas
                         List<Room> rooms = roomDao.getAllRooms();
@@ -100,13 +102,14 @@ public class MainMenu {
                     case 4: // Actualizar
                         System.out.print("ID de la Room a actualizar: "); int idUpdate = scanner.nextInt();
                         scanner.nextLine();
-                        Optional<Room> roomToUpdate = roomDao.getRoomById(idUpdate);
-                        if (roomToUpdate != null) {
+                        Optional<Room> roomToUpdateOptional = roomDao.getRoomById(idUpdate); // Recibe Optional
+                        if (roomToUpdateOptional.isPresent()) {
+                            Room roomToUpdate = roomToUpdateOptional.get(); // Obtiene la Room
                             System.out.print("Nuevo tema (actual: " + roomToUpdate.getTheme() + "): "); String newTheme = scanner.nextLine();
-                            System.out.print("Nueva capacidad (actual: " + roomToUpdate.getDifficulty_level() + "): "); int newCapacity = scanner.nextInt();
+                            System.out.print("Nuevo nivel de dificultad (actual: " + roomToUpdate.getDifficultyLevel() + "): "); int newDifficulty = scanner.nextInt();
                             scanner.nextLine();
                             roomToUpdate.setTheme(newTheme);
-                            roomToUpdate.setDifficulty_level(newCapacity);
+                            roomToUpdate.setDifficultyLevel(newDifficulty);
                             roomDao.updateRoom(roomToUpdate);
                         } else {
                             System.out.println("Room con ID " + idUpdate + " no encontrada para actualizar.");
@@ -123,10 +126,13 @@ public class MainMenu {
                     default:
                         System.out.println("Opción no válida.");
                 }
-            } catch (Exception e) {
-                System.err.println("Error en la operación de Room: " + e.getMessage());
+            } catch (SQLException e) { // Captura solo SQLException aquí
+                System.err.println("Error de base de datos en la operación de Room: " + e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e) { // Captura cualquier otra excepción general
+                System.err.println("Error inesperado en la operación de Room: " + e.getMessage());
                 e.printStackTrace();
             }
-        } while (roomInput != 0);
+        } while (roomChoice != 0);
     }
 }

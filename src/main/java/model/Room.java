@@ -19,8 +19,8 @@ public class Room {
     public void setId(int id) {this.id = id;}
     public String getTheme() {return theme;}
     public void setTheme(String theme) {this.theme = theme;}
-    public int getDifficulty_level() {return difficulty_level;}
-    public void setDifficulty_level(int difficulty_level) {this.difficulty_level = difficulty_level;}
+    public int getDifficultyLevel() {return difficulty_level;}
+    public void setDifficultyLevel(int difficulty_level) {this.difficulty_level = difficulty_level;}
 
     @Override
     public String toString() {
