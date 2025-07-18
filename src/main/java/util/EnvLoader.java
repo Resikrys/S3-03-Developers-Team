@@ -11,9 +11,12 @@ public class EnvLoader {
             this.dotenv = Dotenv.configure()
                     .filename(".env") // Nombre del archivo, por defecto es .env
                     .load();
-        } catch (io.github.cdimascio.dotenv.DotenvException e) {
+        } catch (io.github.cdimascio.dotenv.DotenvException e) { // Mantener la excepción específica si la tienes definida en pom.xml
             System.err.println("Error: No se pudo cargar el archivo .env. Asegúrate de que exista en la raíz del proyecto o en la ruta especificada. " + e.getMessage());
             throw new RuntimeException("Fallo al cargar variables de entorno desde .env", e);
+        } catch (Exception e) { // Capturar cualquier otra excepción inesperada
+            System.err.println("Error inesperado al cargar el archivo .env: " + e.getMessage());
+            throw new RuntimeException("Fallo inesperado al cargar variables de entorno desde .env", e);
         }
     }
 
