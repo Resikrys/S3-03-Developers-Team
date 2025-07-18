@@ -2,6 +2,7 @@ package manager;
 
 import dao.RoomDao;
 import dao.RoomDaoImplementation;
+import exception.InvalidInputException;
 import exception.RoomNotFoundException;
 import model.Room;
 import util.ScannerManager;
@@ -55,6 +56,8 @@ public class RoomManager {
                     default:
                         System.out.println("Invalid option.");
                 }
+            } catch (InvalidInputException e) {
+                System.err.println("Input error: " + e.getMessage() + ". Please try again.");
             } catch (RoomNotFoundException e) {
                 System.err.println("Error: " + e.getMessage());
             } catch (SQLException e) {

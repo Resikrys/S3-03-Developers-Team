@@ -1,5 +1,7 @@
 package util;
 
+import exception.InvalidInputException;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -38,8 +40,7 @@ public class ScannerManager {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            System.err.println("Invalid number format. Value will be set to NULL or ignored.");
-            return null; // O podrías relanzar una excepción personalizada si quieres que sea un error
+            throw new InvalidInputException("Invalid number format for optional integer: '" + input + "'", e);
         }
     }
 
