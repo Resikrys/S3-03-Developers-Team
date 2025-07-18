@@ -4,9 +4,8 @@ public class Room {
     private int id;
     private String theme;
     private int difficultyLevel;
-    private Integer escapeRoomId; // Usamos Integer para permitir valores NULL
+    private Integer escapeRoomId;
 
-    // Constructor con ID (para recuperar de DB)
     public Room(int id, String theme, int difficultyLevel, Integer escapeRoomId) {
         this.id = id;
         this.theme = theme;
@@ -14,14 +13,12 @@ public class Room {
         this.escapeRoomId = escapeRoomId;
     }
 
-    // Constructor sin ID (para crear nuevas Rooms, el ID será auto-generado)
     public Room(String theme, int difficultyLevel, Integer escapeRoomId) {
         this.theme = theme;
         this.difficultyLevel = difficultyLevel;
         this.escapeRoomId = escapeRoomId;
     }
 
-    // Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -31,8 +28,8 @@ public class Room {
     public int getDifficultyLevel() { return difficultyLevel; }
     public void setDifficultyLevel(int difficultyLevel) { this.difficultyLevel = difficultyLevel; }
 
-    public Integer getEscapeRoomId() { return escapeRoomId; } // Retorna Integer
-    public void setEscapeRoomId(Integer escapeRoomId) { this.escapeRoomId = escapeRoomId; } // Recibe Integer
+    public Integer getEscapeRoomId() { return escapeRoomId; }
+    public void setEscapeRoomId(Integer escapeRoomId) { this.escapeRoomId = escapeRoomId; }
 
     @Override
     public String toString() {

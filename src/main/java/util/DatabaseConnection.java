@@ -5,16 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static DatabaseConnection instance; // La única instancia de la clase
-    private Connection connection; // La conexión a la base de datos
+    private static DatabaseConnection instance;
+    private Connection connection;
 
     private String dbUrl;
     private String dbUser;
     private String dbPassword;
 
-    // Constructor privado para evitar instanciación externa
     private DatabaseConnection() {
-        // Utiliza EnvLoader para obtener las credenciales
         EnvLoader envLoader = EnvLoader.getInstance();
 
         String dbHost = envLoader.getEnv("MYSQL_HOST", "localhost");
@@ -23,19 +21,17 @@ public class DatabaseConnection {
 
         this.dbUrl = String.format("jdbc:mysql://%s:%s/%s", dbHost, dbPort, dbName);
         this.dbUser = envLoader.getEnv("MYSQL_USER", "escaperoom_app_user");
-        this.dbPassword = envLoader.getEnv("MYSQL_PASSWORD"); // Sin valor por defecto aquí por seguridad
+        this.dbPassword = envLoader.getEnv("MYSQL_PASSWORD");
 
-        // Validar que la contraseña no sea nula
         if (this.dbPassword == null || this.dbPassword.isEmpty()) {
-            throw new RuntimeException("Error: La contraseña de la base de datos (MYSQL_PASSWORD) no está definida en el archivo .env o en el entorno.");
+            throw new RuntimeException("Error: The database password (MYSQL_PASSWORD) is not defined in the .env file or in the environment.");
         }
 
-        // Cargar el driver JDBC una sola vez
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.err.println("Error: MySQL JDBC Driver no encontrado. Asegúrate de que la dependencia esté en tu pom.xml.");
-            throw new RuntimeException("Fallo al cargar el driver JDBC", e);
+            System.err.println("Error: MySQL JDBC Driver not found. Make sure the dependency is in your pom.xml.");
+            throw new RuntimeException("Failed to load JDBC driver", e);
         }
     }
 
@@ -49,12 +45,10 @@ public class DatabaseConnection {
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                // System.out.println("DEBUG - Abriendo nueva conexión a DB URL: " + dbUrl); // Para depuración
-                // System.out.println("DEBUG - DB User: " + dbUser); // Para depuración
                 connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
             } catch (SQLException e) {
-                System.err.println("Error al obtener la conexión a la base de datos: " + e.getMessage());
-                throw e; // Relanzar la excepción
+                System.err.println("Error getting database connection: " + e.getMessage());
+                throw e;
             }
         }
         return connection;
@@ -64,9 +58,9 @@ public class DatabaseConnection {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Conexión a la base de datos cerrada.");
+                System.out.println("Database connection closed.");
             } catch (SQLException e) {
-                System.err.println("Error al cerrar la conexión a la base de datos: " + e.getMessage());
+                System.err.println("Error closing database connection: " + e.getMessage());
             }
         }
     }

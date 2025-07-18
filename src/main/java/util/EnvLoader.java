@@ -3,20 +3,21 @@ package util;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class EnvLoader {
-    private static EnvLoader instance; // La única instancia de la clase
+    private static EnvLoader instance;
     private final Dotenv dotenv;
 
     private EnvLoader() {
         try {
             this.dotenv = Dotenv.configure()
-                    .filename(".env") // Nombre del archivo, por defecto es .env
+                    .filename(".env")
                     .load();
-        } catch (io.github.cdimascio.dotenv.DotenvException e) { // Mantener la excepción específica si la tienes definida en pom.xml
-            System.err.println("Error: No se pudo cargar el archivo .env. Asegúrate de que exista en la raíz del proyecto o en la ruta especificada. " + e.getMessage());
-            throw new RuntimeException("Fallo al cargar variables de entorno desde .env", e);
+        } catch (io.github.cdimascio.dotenv.DotenvException e) {
+            System.err.println("Error: The .env file could not be loaded. Make sure it exists in the project root or in the specified path. "
+                    + e.getMessage());
+            throw new RuntimeException("Failed to load environment variables from .env", e);
         } catch (Exception e) { // Capturar cualquier otra excepción inesperada
-            System.err.println("Error inesperado al cargar el archivo .env: " + e.getMessage());
-            throw new RuntimeException("Fallo inesperado al cargar variables de entorno desde .env", e);
+            System.err.println("Unexpected error loading .env file: " + e.getMessage());
+            throw new RuntimeException("Unexpected failure loading environment variables from .env", e);
         }
     }
 
@@ -34,5 +35,4 @@ public class EnvLoader {
     public String getEnv(String key, String defaultValue) {
         return dotenv.get(key, defaultValue);
     }
-
 }
