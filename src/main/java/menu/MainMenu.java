@@ -82,7 +82,17 @@ public class MainMenu {
                         System.out.print("Tema: "); String theme = scanner.nextLine();
                         System.out.print("Nivel de Dificultad (1-10): "); int difficulty = scanner.nextInt();
                         scanner.nextLine(); // Consumir nueva línea
-                        roomDao.createRoom(new Room(theme, difficulty)); // Usar createRoom
+                        System.out.print("ID del Escape Room al que pertenece (dejar en blanco si no aplica): ");
+                        String escapeRoomIdInput = scanner.nextLine(); // Leer como String
+                        Integer escapeRoomId = null; // Inicializar como null
+                        if (!escapeRoomIdInput.trim().isEmpty()) { // Si el usuario no dejó en blanco
+                            try {
+                                escapeRoomId = Integer.parseInt(escapeRoomIdInput);
+                            } catch (NumberFormatException e) {
+                                System.err.println("ID de Escape Room inválido. Se establecerá como NULO.");
+                            }
+                        }
+                        roomDao.createRoom(new Room(theme, difficulty, escapeRoomId));
                         break;
                     case 2: // Obtener por ID
                         System.out.print("ID de la Room a obtener: "); int idGet = scanner.nextInt();
@@ -102,14 +112,26 @@ public class MainMenu {
                     case 4: // Actualizar
                         System.out.print("ID de la Room a actualizar: "); int idUpdate = scanner.nextInt();
                         scanner.nextLine();
-                        Optional<Room> roomToUpdateOptional = roomDao.getRoomById(idUpdate); // Recibe Optional
+                        Optional<Room> roomToUpdateOptional = roomDao.getRoomById(idUpdate);
                         if (roomToUpdateOptional.isPresent()) {
-                            Room roomToUpdate = roomToUpdateOptional.get(); // Obtiene la Room
+                            Room roomToUpdate = roomToUpdateOptional.get();
                             System.out.print("Nuevo tema (actual: " + roomToUpdate.getTheme() + "): "); String newTheme = scanner.nextLine();
                             System.out.print("Nuevo nivel de dificultad (actual: " + roomToUpdate.getDifficultyLevel() + "): "); int newDifficulty = scanner.nextInt();
                             scanner.nextLine();
+                            System.out.print("Nuevo ID del Escape Room (actual: " + (roomToUpdate.getEscapeRoomId() != null ? roomToUpdate.getEscapeRoomId() : "NULO") + ", dejar en blanco si no aplica): ");
+                            String newEscapeRoomIdInput = scanner.nextLine(); // Leer como String
+                            Integer newEscapeRoomId = null;
+                            if (!newEscapeRoomIdInput.trim().isEmpty()) {
+                                try {
+                                    newEscapeRoomId = Integer.parseInt(newEscapeRoomIdInput);
+                                } catch (NumberFormatException e) {
+                                    System.err.println("ID de Escape Room inválido. Se mantendrá el valor actual.");
+                                    newEscapeRoomId = roomToUpdate.getEscapeRoomId(); // Mantener el valor actual en caso de error
+                                }
+                            }
                             roomToUpdate.setTheme(newTheme);
                             roomToUpdate.setDifficultyLevel(newDifficulty);
+                            roomToUpdate.setEscapeRoomId(newEscapeRoomId);
                             roomDao.updateRoom(roomToUpdate);
                         } else {
                             System.out.println("Room con ID " + idUpdate + " no encontrada para actualizar.");

@@ -16,9 +16,9 @@ CREATE TABLE EscapeRoom (
 );
 
 INSERT INTO EscapeRoom (name, total_tickets) VALUES
-('La Mansión Embrujada', 100),
-('El Búnker Secreto', 50),
-('El Laboratorio Abandonado', 75);
+('The Haunted Mansion', 100),
+('The Secret Bunker', 50),
+('The Abandoned Laboratory', 75);
 
 CREATE TABLE Room (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -29,11 +29,11 @@ CREATE TABLE Room (
 );
 
 INSERT INTO Room (theme, difficulty_level, escape_room_id) VALUES
-('Terror Clásico', 8, 1),      -- De La Mansión Embrujada
-('Misterio Gótico', 7, 1),     -- De La Mansión Embrujada
-('Supervivencia Post-Apocalíptica', 9, 2), -- Del Búnker Secreto
-('Ciencia Ficción Retro', 6, 3),   -- Del Laboratorio Abandonado
-('Sala de Prueba NULL', 5, NULL);
+('Classic Horror', 8, 1), -- From The Haunted Mansion
+('Gothic Mistery', 7, 1), -- Of The Haunted Mansion
+('Post-Apocalyptic Survival', 9, 2), -- From the Secret Bunker
+('Retro SciFi', 6, 3), -- From the Abandoned Laboratory
+('NULL Test Room', 5, NULL);
 
 CREATE TABLE DecorationObject (
     id INT PRIMARY KEY AUTO_INCREMENT,
