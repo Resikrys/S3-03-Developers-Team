@@ -120,7 +120,7 @@ public class RoomDaoImplementation implements RoomDao {
 
     @Override
     public void deleteRoom(int id) throws SQLException {
-        String sql = "DELETE FROM rooms WHERE id = ?";
+        String sql = "DELETE FROM Room WHERE id = ?";
         try {
             int rowsAffected = sqlExecutor.executeUpdate(sql, id);
             if (rowsAffected > 0) {
