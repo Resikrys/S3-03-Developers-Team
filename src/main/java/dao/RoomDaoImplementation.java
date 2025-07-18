@@ -19,12 +19,13 @@ public class RoomDaoImplementation implements RoomDao {
     @Override
     public void createRoom(Room room) throws SQLException { // Cambiado a createRoom
         // Asumiendo que 'id' es AUTO_INCREMENT y no se incluye en el INSERT
-        String sql = "INSERT INTO rooms (theme, difficulty_level) VALUES (?, ?)";
+        String sql = "INSERT INTO Room (theme, difficulty_level, escape_room_id) VALUES (?, ?, ?)";
         try {
             int rowsAffected = sqlExecutor.executeUpdate(
                     sql,
                     room.getTheme(),
-                    room.getDifficultyLevel()
+                    room.getDifficultyLevel(),
+                    room.getEscapeRoomId()
             );
             if (rowsAffected > 0) {
                 System.out.println("Room con tema '" + room.getTheme() + "' creada exitosamente.");
@@ -37,18 +38,24 @@ public class RoomDaoImplementation implements RoomDao {
 
     @Override
     public Optional<Room> getRoomById(int id) throws SQLException {
-        String sql = "SELECT id, theme, difficulty_level FROM rooms WHERE id = ?";
+        String sql = "SELECT id, theme, difficulty_level, escape_room_id FROM Room WHERE id = ?";
         try {
             // El lambda ahora devuelve directamente un Optional<Room>
             return sqlExecutor.executeQuery(
                     sql,
                     rs -> {
-                        if (rs.next()) {
-                            return Optional.of(new Room(
-                                    rs.getInt("id"),
-                                    rs.getString("theme"),
-                                    rs.getInt("difficulty_level")
-                            ));
+                        try {
+                            if (rs.next()) {
+                                Integer escapeRoomId = (Integer) rs.getObject("escape_room_id"); // Usamos getObject para NULLs
+                                return Optional.of(new Room(
+                                        rs.getInt("id"),
+                                        rs.getString("theme"),
+                                        rs.getInt("difficulty_level"),
+                                        escapeRoomId // Pasar Integer
+                                ));
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
                         }
                         return Optional.empty(); // Si no hay resultados, retorna Optional.empty()
                     },
@@ -63,17 +70,19 @@ public class RoomDaoImplementation implements RoomDao {
     @Override
     public List<Room> getAllRooms() throws SQLException {
         List<Room> rooms = new ArrayList<>();
-        String sql = "SELECT id, theme, difficulty_level FROM rooms";
+        String sql = "SELECT id, theme, difficulty_level, escape_room_id FROM Room";
         try {
             sqlExecutor.executeQuery(
                     sql,
                     rs -> {
                         try {
                             while (rs.next()) {
+                                Integer escapeRoomId = (Integer) rs.getObject("escape_room_id"); // Leer como Integer
                                 rooms.add(new Room(
                                         rs.getInt("id"),
                                         rs.getString("theme"),
-                                        rs.getInt("difficulty_level")
+                                        rs.getInt("difficulty_level"),
+                                        escapeRoomId // Pasar Integer
                                 ));
                             }
                         } catch (SQLException e) {
@@ -91,12 +100,13 @@ public class RoomDaoImplementation implements RoomDao {
 
     @Override
     public void updateRoom(Room room) throws SQLException {
-        String sql = "UPDATE rooms SET theme = ?, difficulty_level = ? WHERE id = ?";
+        String sql = "UPDATE Room SET theme = ?, difficulty_level = ?, escape_room_id = ? WHERE id = ?";
         try {
             int rowsAffected = sqlExecutor.executeUpdate(
                     sql,
                     room.getTheme(),
                     room.getDifficultyLevel(),
+                    room.getEscapeRoomId(), // Si es null, setObject lo manejará correctamente
                     room.getId()
             );
             if (rowsAffected > 0) {

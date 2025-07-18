@@ -3,31 +3,44 @@ package model;
 public class Room {
     private int id;
     private String theme;
-    private int difficulty_level;
+    private int difficultyLevel;
+    private Integer escapeRoomId; // Usamos Integer para permitir valores NULL
 
-    public Room(int id, String theme, int difficulty_level) {
+    // Constructor con ID (para recuperar de DB)
+    public Room(int id, String theme, int difficultyLevel, Integer escapeRoomId) {
         this.id = id;
         this.theme = theme;
-        this.difficulty_level = difficulty_level;
+        this.difficultyLevel = difficultyLevel;
+        this.escapeRoomId = escapeRoomId;
     }
 
-    public Room(String theme, int difficulty_level) {
-        this(0, theme, difficulty_level); // delega en el constructor completo
+    // Constructor sin ID (para crear nuevas Rooms, el ID será auto-generado)
+    public Room(String theme, int difficultyLevel, Integer escapeRoomId) {
+        this.theme = theme;
+        this.difficultyLevel = difficultyLevel;
+        this.escapeRoomId = escapeRoomId;
     }
 
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
-    public String getTheme() {return theme;}
-    public void setTheme(String theme) {this.theme = theme;}
-    public int getDifficultyLevel() {return difficulty_level;}
-    public void setDifficultyLevel(int difficulty_level) {this.difficulty_level = difficulty_level;}
+    // Getters y Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getTheme() { return theme; }
+    public void setTheme(String theme) { this.theme = theme; }
+
+    public int getDifficultyLevel() { return difficultyLevel; }
+    public void setDifficultyLevel(int difficultyLevel) { this.difficultyLevel = difficultyLevel; }
+
+    public Integer getEscapeRoomId() { return escapeRoomId; } // Retorna Integer
+    public void setEscapeRoomId(Integer escapeRoomId) { this.escapeRoomId = escapeRoomId; } // Recibe Integer
 
     @Override
     public String toString() {
         return "Room{" +
                 "id=" + id +
                 ", theme='" + theme + '\'' +
-                ", capacity=" + difficulty_level +
+                ", difficultyLevel=" + difficultyLevel +
+                ", escapeRoomId=" + escapeRoomId +
                 '}';
     }
 }

@@ -19,7 +19,7 @@ public class DatabaseConnection {
 
         String dbHost = envLoader.getEnv("MYSQL_HOST", "localhost");
         String dbPort = envLoader.getEnv("MYSQL_PORT", "3307");
-        String dbName = envLoader.getEnv("MYSQL_DATABASE", "escaperoom_db_trial");
+        String dbName = envLoader.getEnv("MYSQL_DATABASE", "escaperoom_db");
 
         this.dbUrl = String.format("jdbc:mysql://%s:%s/%s", dbHost, dbPort, dbName);
         this.dbUser = envLoader.getEnv("MYSQL_USER", "escaperoom_app_user");
