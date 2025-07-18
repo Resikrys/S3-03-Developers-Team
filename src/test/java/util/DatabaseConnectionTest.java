@@ -15,34 +15,34 @@ class DatabaseConnectionTest {
     @BeforeAll
     static void setUpAll() {
         EnvLoader.getInstance();
-        System.out.println("Configurando ambiente de prueba para la conexión a la base de datos.");
+        System.out.println("Configuring the test environment for the connection to the database.");
     }
 
     @AfterAll
     static void tearDownAll() {
         DatabaseConnection.getInstance().closeConnection();
-        System.out.println("Limpieza de ambiente de prueba de la conexión a la base de datos.");
+        System.out.println("Cleanup test environment of the connection to the database.");
     }
 
     @Test
     void testGetConnection() {
-        System.out.println("Ejecutando testGetConnection...");
+        System.out.println("Running testGetConnection...");
         try {
             connection = DatabaseConnection.getInstance().getConnection();
 
-            assertNotNull(connection, "La conexión a la base de datos no debería ser nula.");
-            assertFalse(connection.isClosed(), "La conexión a la base de datos no debería estar cerrada.");
+            assertNotNull(connection, "The database connection should not be null.");
+            assertFalse(connection.isClosed(), "The database connection should not be closed.");
 
-            System.out.println("Conexión de prueba exitosa: " + connection.getMetaData().getURL());
+            System.out.println("Successful test connection: " + connection.getMetaData().getURL());
 
         } catch (SQLException e) {
-            fail("Falló al obtener la conexión a la base de datos: " + e.getMessage());
+            fail("Failed to get database connection: " + e.getMessage());
         }
     }
 
     @Test
     void testConnectionClosesCleanly() {
-        System.out.println("Ejecutando testConnectionClosesCleanly...");
+        System.out.println("Running testConnectionClosesCleanly...");
         try {
             Connection tempConnection = DatabaseConnection.getInstance().getConnection();
             assertNotNull(tempConnection);
@@ -51,19 +51,19 @@ class DatabaseConnectionTest {
             DatabaseConnection.getInstance().closeConnection();
 
             Connection newConnectionAfterClose = DatabaseConnection.getInstance().getConnection();
-            assertNotNull(newConnectionAfterClose, "Debería poder obtener una nueva conexión después de cerrar la anterior.");
-            assertFalse(newConnectionAfterClose.isClosed(), "La nueva conexión no debería estar cerrada.");
+            assertNotNull(newConnectionAfterClose, "You should be able to get a new connection after closing the previous one.");
+            assertFalse(newConnectionAfterClose.isClosed(), "The new connection should not be closed.");
 
-            System.out.println("La conexión se cerró y se pudo reabrir.");
+            System.out.println("The connection was closed and could be reopened.");
 
         } catch (SQLException e) {
-            fail("Falló el test de cierre y reapertura de conexión: " + e.getMessage());
+            fail("Connection closing and reopening test failed: " + e.getMessage());
         }
     }
 
     @Test
     void testGetConnectionThrowsExceptionIfCredentialsAreBad() {
-        System.out.println("Ejecutando testGetConnectionThrowsExceptionIfCredentialsAreBad (esperando fallo)...");
+        System.out.println("Running testGetConnectionThrowsExceptionIfCredentialsAreBad (expecting failure)...");
 
         assertDoesNotThrow(() -> DatabaseConnection.getInstance().getConnection(),
                 "Getting connection should not throw an immediate exception if credentials are set.");
