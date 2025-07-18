@@ -106,7 +106,7 @@ public class MainMenu {
                         if (rooms.isEmpty()) System.out.println("No rooms available.");
                         else rooms.forEach(System.out::println);
                         break;
-                    case 4: // Actualizar
+                    case 4:
                         System.out.print("ID of the Room to be updated: "); int idUpdate = scanner.nextInt();
                         scanner.nextLine();
                         Optional<Room> roomToUpdateOptional = roomDao.getRoomById(idUpdate);
