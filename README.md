@@ -11,7 +11,7 @@
 
 This exercise involves developing an application to manage a virtual Escape
 Room. The application will allow the creation and management of themed rooms,
-intriguing clues, unique decoration items, and maintain an up-to-date inventory.
+intriguing clueObjects, unique decoration items, and maintain an up-to-date inventory.
 Additionally, functionalities for tracking income, and user notifications will
 be implemented. Data persistence will be achieved using MySQL.
 
