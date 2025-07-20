@@ -2,11 +2,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import menu.EscapeRoomMenu;
+import menu.MainMenu;
+import menu.PlayerMenu;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== Escape Room Manager ===");
-        new EscapeRoomMenu().show();
+
+        //new EscapeRoomMenu().show();
+        //new PlayerMenu().show();
+        new MainMenu().show();
     }
 }
 
