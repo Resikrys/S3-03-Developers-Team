@@ -57,8 +57,7 @@ public class DecorationManager {
     private void createDecoration() throws SQLException {
         String name = scanner.readString("Decoration name: ");
         BigDecimal price = scanner.readBigDecimal("Price: ");
-        String materialInput = scanner.readString("Material (PAPER, WOOD, METAL, PLASTIC): ");
-        Material material = Material.valueOf(materialInput.toUpperCase());
+        Material material = scanner.readEnum(Material.class, "Choose a material:");
         int roomId = scanner.readInt("Room ID: ");
 
         DecorationObject decoration = new DecorationObject(name, price, material, roomId);
