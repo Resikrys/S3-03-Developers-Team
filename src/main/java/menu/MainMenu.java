@@ -1,9 +1,12 @@
 package menu;
 
+import dao.*;
+import manager.InventoryService;
 import util.DatabaseConnection;
 import util.EnvLoader;
 import manager.RoomManager;
 import util.InputHelper;
+import util.SQLExecutor;
 
 
 public class MainMenu {
@@ -11,6 +14,7 @@ public class MainMenu {
     private final RoomManager roomManager;
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
+    private final InventoryService inventoryService;
 
     public MainMenu() {
         EnvLoader.getInstance();
@@ -19,6 +23,12 @@ public class MainMenu {
         this.roomManager = new RoomManager(inputHelper);
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
+
+        RoomDao roomDao = new RoomDaoImplementation();
+        ClueDao clueDao = new ClueDAOImplementation(new SQLExecutor());
+        DecorationObjectDAO decorationDao = new DecorationDAOImplementation();
+
+        this.inventoryService = new InventoryService(roomDao, clueDao, decorationDao);
 
     }
 
@@ -30,6 +40,7 @@ public class MainMenu {
                 System.out.println("1. CRUD Operations -> Rooms");
                 System.out.println("2. CRUD Operations -> Clues");
                 System.out.println("3. CRUD Operations -> Decoration Objects");
+                System.out.println("4. Inventory Menu");
                 System.out.println("0. Exit");
                 input = inputHelper.readInt("Select option: ");
 
@@ -41,9 +52,11 @@ public class MainMenu {
                         clueMenu.showMenu();
                         break;
                     case 3:
-                        decorationMenu.showMenu();  // ✅ Añadida opción para objetos de decoración
+                        decorationMenu.showMenu();
                         break;
-
+                    case 4:
+                        inventoryService.showInteractiveInventoryMenu(inputHelper);
+                        break;
                     case 0:
                         System.out.println("Exiting the application. See you soon!");
                         break;
