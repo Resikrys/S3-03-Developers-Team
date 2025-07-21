@@ -10,119 +10,92 @@ import util.InputHelper;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class DecorationManager {
     private final DecorationObjectDAO decorationDao;
-    private final InputHelper scanner;
+    private final InputHelper inputHelper; // Renamed for consistency
 
     public DecorationManager(InputHelper inputHelper) {
         this.decorationDao = new DecorationDAOImplementation();
-        this.scanner = inputHelper;
+        this.inputHelper = inputHelper;
     }
 
-    public void handleDecorationCrud() {
-        int option;
-        do {
-            System.out.println("\n--- Decoration Objects CRUD ---");
-            System.out.println("1. Create Decoration");
-            System.out.println("2. Search Decoration by ID");
-            System.out.println("3. List All Decorations");
-            System.out.println("4. Update Decoration");
-            System.out.println("5. Delete Decoration");
-            System.out.println("6. Show Decorations by Room ID");
-            System.out.println("0. Back to Main Menu");
+    // The handleDecorationCrud() method is REMOVED from here and moved to DecorationMenu.
 
-            option = scanner.readInt("Choose an option: ");
-
-            try {
-                switch (option) {
-                    case 1 -> createDecoration();
-                    case 2 -> getDecorationById();
-                    case 3 -> listAllDecorations();
-                    case 4 -> updateDecoration();
-                    case 5 -> deleteDecoration();
-                    case 6 -> getByRoomId();
-                    case 0 -> System.out.println("Returning to main menu.");
-                    default -> System.out.println("Invalid option.");
-                }
-            } catch (DecorationNotFoundException | SQLException e) {
-                System.err.println("❌ Error: " + e.getMessage());
-            } catch (Exception e) {
-                System.err.println("❌ Unexpected error: " + e.getMessage());
-            }
-        } while (option != 0);
-    }
-
-    // Crea un nuevo objeto de decoración
-    private void createDecoration() throws SQLException {
-        String name = scanner.readString("Decoration name: ");
-        BigDecimal price = scanner.readBigDecimal("Price: ");
-        Material material = scanner.readEnum(Material.class, "Choose a material:");
-        int roomId = scanner.readInt("Room ID: ");
+    public void createDecoration() throws SQLException { // Made public
+        String name = inputHelper.readString("Decoration name: ");
+        BigDecimal price = inputHelper.readBigDecimal("Price: ");
+        // Ensure readEnum handles invalid input and throws InvalidInputException
+        Material material = inputHelper.readEnum(Material.class, "Choose a material (WOOD, METAL, PLASTIC, etc.): ");
+        int roomId = inputHelper.readInt("Room ID: ");
 
         DecorationObject decoration = new DecorationObject(name, price, material, roomId);
         decorationDao.createDecoration(decoration);
-        System.out.println("✅ Decoration object created successfully.");
+        // Confirmation message is now handled in DAO
     }
 
-    // Busca un objeto por su ID
-    private void getDecorationById() throws SQLException {
-        int id = scanner.readInt("Enter the ID of the decoration: ");
-        DecorationObject d = decorationDao.getDecorationById(id);
-        if (d != null) {
-            System.out.println("🎯 Found: " + d);
+    public void getDecorationById() throws SQLException { // Made public
+        int id = inputHelper.readInt("Enter the ID of the decoration to search: ");
+        Optional<DecorationObject> optionalDecoration = decorationDao.getDecorationById(id); // Use Optional
+
+        if (optionalDecoration.isPresent()) {
+            System.out.println("🎯 Found: " + optionalDecoration.get());
         } else {
             System.out.println("⚠️ No decoration found with ID " + id);
         }
     }
 
-    // Lista todos los objetos de decoración
-    private void listAllDecorations() throws SQLException {
+    public void listAllDecorations() throws SQLException { // Made public
         List<DecorationObject> list = decorationDao.getAllDecorations();
         if (list.isEmpty()) {
             System.out.println("📭 No decorations available.");
         } else {
+            System.out.println("--- All Decorations ---");
             list.forEach(System.out::println);
         }
     }
 
-    // Actualiza un objeto de decoración existente
-    private void updateDecoration() throws SQLException, DecorationNotFoundException {
-        int id = scanner.readInt("ID of the decoration to update: ");
-        DecorationObject d = decorationDao.getDecorationById(id);
-        if (d == null) {
-            throw new DecorationNotFoundException("Decoration with ID " + id + " not found.");
+    public void updateDecoration() throws SQLException, DecorationNotFoundException { // Made public
+        int id = inputHelper.readInt("ID of the decoration to update: ");
+        Optional<DecorationObject> optionalDecoration = decorationDao.getDecorationById(id); // Use Optional
+
+        if (optionalDecoration.isPresent()) {
+            DecorationObject decorationToUpdate = optionalDecoration.get();
+            System.out.println("Current details for Decoration ID " + id + ": " + decorationToUpdate);
+
+            String newName = inputHelper.readString("New name (current: " + decorationToUpdate.getName() + "): ");
+            BigDecimal newPrice = inputHelper.readBigDecimal("New price (current: " + decorationToUpdate.getPrice() + "): ");
+            // Handle enum input more robustly: use readEnum
+            Material newMaterial = inputHelper.readEnum(Material.class, "New material (current: " + decorationToUpdate.getMaterial().name() + "): ");
+            int newRoomId = inputHelper.readInt("New room ID (current: " + decorationToUpdate.getRoomId() + "): ");
+
+            decorationToUpdate.setName(newName);
+            decorationToUpdate.setPrice(newPrice);
+            decorationToUpdate.setMaterial(newMaterial);
+            decorationToUpdate.setRoomId(newRoomId);
+
+            decorationDao.updateDecoration(decorationToUpdate);
+            // Confirmation message handled in DAO
+        } else {
+            // No need to throw here, just inform the user
+            System.out.println("⚠️ Decoration with ID " + id + " not found for update.");
         }
-
-        String newName = scanner.readString("New name (current: " + d.getName() + "): ");
-        BigDecimal newPrice = scanner.readBigDecimal("New price (current: " + d.getPrice() + "): ");
-        String newMaterialStr = scanner.readString("New material (current: " + d.getMaterial() + "): ");
-        Material newMaterial = Material.valueOf(newMaterialStr.toUpperCase());
-        int newRoomId = scanner.readInt("New room ID (current: " + d.getRoomId() + "): ");
-
-        d.setName(newName);
-        d.setPrice(newPrice);
-        d.setMaterial(newMaterial);
-        d.setRoomId(newRoomId);
-
-        decorationDao.updateDecoration(d);
-        System.out.println("✅ Decoration updated successfully.");
     }
 
-    // Elimina un objeto por ID
-    private void deleteDecoration() throws SQLException, DecorationNotFoundException {
-        int id = scanner.readInt("ID of the decoration to delete: ");
+    public void deleteDecoration() throws SQLException, DecorationNotFoundException { // Made public
+        int id = inputHelper.readInt("ID of the decoration to delete: ");
         decorationDao.deleteDecoration(id);
-        System.out.println("🗑️ Decoration deleted successfully.");
+        // Confirmation message handled in DAO
     }
 
-    // Muestra todas las decoraciones asociadas a un roomId concreto
-    private void getByRoomId() throws SQLException {
-        int roomId = scanner.readInt("Enter the Room ID: ");
+    public void getByRoomId() throws SQLException { // Made public
+        int roomId = inputHelper.readInt("Enter the Room ID to list decorations for: ");
         List<DecorationObject> list = decorationDao.getDecorationsByRoomId(roomId);
         if (list.isEmpty()) {
-            System.out.println("❌ No decorations found in that room.");
+            System.out.println("❌ No decorations found in room ID " + roomId + ".");
         } else {
+            System.out.println("--- Decorations in Room " + roomId + " ---");
             list.forEach(System.out::println);
         }
     }

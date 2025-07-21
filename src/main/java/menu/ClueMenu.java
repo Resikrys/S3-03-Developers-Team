@@ -1,6 +1,7 @@
 package menu;
 
 import exception.InvalidInputException;
+import exception.NotFoundException;
 import manager.ClueManager;
 import util.InputHelper;
 
@@ -8,27 +9,31 @@ import java.sql.SQLException;
 
 public class ClueMenu {
     private final ClueManager clueManager;
-    private final InputHelper scanner;
+    private final InputHelper inputHelper; // Renamed 'scanner' to 'inputHelper' for consistency
 
     public ClueMenu(InputHelper inputHelper) {
         this.clueManager = new ClueManager(inputHelper);
-        this.scanner = inputHelper;
+        this.inputHelper = inputHelper;
     }
 
     public void showMenu() {
         int choice;
         do {
             printMenu();
-            choice = scanner.readInt("Select an option: ");
+            choice = inputHelper.readInt("Select an option: ");
 
             try {
                 handleChoice(choice);
             } catch (InvalidInputException e) {
-                System.err.println("❌ Input error: " + e.getMessage());
+                System.err.println("❌ Input error: " + e.getMessage() + ". Please try again.");
+            } catch (NotFoundException e) { // New catch block for ClueNotFoundException
+                System.err.println("❌ Operation error: " + e.getMessage());
             } catch (SQLException e) {
                 System.err.println("❌ Database error: " + e.getMessage());
+                e.printStackTrace();
             } catch (Exception e) {
                 System.err.println("❌ Unexpected error: " + e.getMessage());
+                e.printStackTrace();
             }
 
         } while (choice != 0);
@@ -43,9 +48,10 @@ public class ClueMenu {
         System.out.println("5. Search clue by ID");
         System.out.println("6. List clues by Room ID");
         System.out.println("0. Back to main menu");
+        System.out.print("Select an option: "); // Added prompt to the menu itself for clarity
     }
 
-    private void handleChoice(int choice) throws Exception {
+    private void handleChoice(int choice) throws SQLException, NotFoundException { // Declares exceptions
         switch (choice) {
             case 1 -> clueManager.createClue();
             case 2 -> clueManager.listAllClues();

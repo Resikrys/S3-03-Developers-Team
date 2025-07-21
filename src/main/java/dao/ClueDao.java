@@ -4,13 +4,14 @@ import model.ClueObject;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface ClueDao {
     // Crear una nueva pista
     void createClue(ClueObject clueObject) throws SQLException;
 
     // Obtener una pista por su ID
-    ClueObject getClueById(int id) throws SQLException;
+    Optional<ClueObject> getClueById(int id) throws SQLException;
 
     // Obtener todas las pistas
     List<ClueObject> getAllClues() throws SQLException;

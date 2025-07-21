@@ -1,6 +1,7 @@
 package menu;
 
 import exception.DecorationNotFoundException;
+import exception.InvalidInputException;
 import manager.DecorationManager;
 import util.InputHelper;
 
@@ -8,10 +9,10 @@ import java.sql.SQLException;
 
 public class DecorationMenu {
     private final DecorationManager decorationManager;
-    private final InputHelper scanner;
+    private final InputHelper inputHelper; // Renamed for consistency
 
     public DecorationMenu(InputHelper inputHelper) {
-        this.scanner = inputHelper;
+        this.inputHelper = inputHelper; // Initialize inputHelper
         this.decorationManager = new DecorationManager(inputHelper);
     }
 
@@ -19,14 +20,20 @@ public class DecorationMenu {
         int option;
         do {
             printMenu();
-            option = scanner.readInt("Choose an option: ");
+            option = inputHelper.readInt("Choose an option: "); // Use inputHelper
 
             try {
                 handleOption(option);
-            } catch (DecorationNotFoundException | SQLException e) {
-                System.err.println("❌ Error: " + e.getMessage());
+            } catch (InvalidInputException e) { // Catch InputHelper exceptions
+                System.err.println("❌ Input error: " + e.getMessage() + ". Please try again.");
+            } catch (DecorationNotFoundException e) {
+                System.err.println("❌ Operation error: " + e.getMessage());
+            } catch (SQLException e) {
+                System.err.println("❌ Database error: " + e.getMessage());
+                e.printStackTrace();
             } catch (Exception e) {
                 System.err.println("❌ Unexpected error: " + e.getMessage());
+                e.printStackTrace();
             }
 
         } while (option != 0);
@@ -41,9 +48,11 @@ public class DecorationMenu {
         System.out.println("5. Delete Decoration");
         System.out.println("6. Show Decorations by Room ID");
         System.out.println("0. Back to Main Menu");
+        System.out.print("Select an option: "); // Added prompt to the menu itself for clarity
     }
 
-    private void handleOption(int option) throws Exception {
+    // Now declares the specific exceptions that manager methods can throw
+    private void handleOption(int option) throws SQLException, DecorationNotFoundException {
         switch (option) {
             case 1 -> decorationManager.createDecoration();
             case 2 -> decorationManager.getDecorationById();
