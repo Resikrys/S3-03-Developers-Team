@@ -1,4 +1,4 @@
-package util;
+package dbconnection;
 
 import io.github.cdimascio.dotenv.Dotenv;
 

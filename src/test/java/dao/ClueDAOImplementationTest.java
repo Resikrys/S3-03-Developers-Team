@@ -3,9 +3,9 @@ package dao;
 import enums.Material;
 import model.ClueObject;
 import org.junit.jupiter.api.*;
-import util.DatabaseConnection;
-import util.EnvLoader;
-import util.SQLExecutor;
+import dbconnection.DatabaseConnection;
+import dbconnection.EnvLoader;
+import dbconnection.SQLExecutor;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

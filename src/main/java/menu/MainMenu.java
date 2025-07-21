@@ -1,7 +1,7 @@
 package menu;
 
-import util.DatabaseConnection;
-import util.EnvLoader;
+import dbconnection.DatabaseConnection;
+import dbconnection.EnvLoader;
 import manager.RoomManager;
 import util.ScannerManager;
 import manager.ClueManager;

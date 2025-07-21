@@ -2,7 +2,7 @@ package dao;
 
 import enums.Material;
 import model.DecorationObject;
-import util.SQLExecutor;
+import dbconnection.SQLExecutor;
 import exception.DecorationNotFoundException;
 
 import java.sql.SQLException;

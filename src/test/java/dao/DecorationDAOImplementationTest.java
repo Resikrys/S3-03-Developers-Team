@@ -4,8 +4,8 @@ import enums.Material;
 import model.DecorationObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.DatabaseConnection;
-import util.EnvLoader;
+import dbconnection.DatabaseConnection;
+import dbconnection.EnvLoader;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

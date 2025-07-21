@@ -5,8 +5,8 @@ import model.Room;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.DatabaseConnection;
-import util.EnvLoader;
+import dbconnection.DatabaseConnection;
+import dbconnection.EnvLoader;
 
 import java.sql.Connection;
 import java.sql.SQLException;

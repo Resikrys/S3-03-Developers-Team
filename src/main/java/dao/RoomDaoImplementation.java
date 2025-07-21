@@ -2,7 +2,7 @@ package dao;
 
 import exception.RoomNotFoundException;
 import model.Room;
-import util.SQLExecutor;
+import dbconnection.SQLExecutor;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

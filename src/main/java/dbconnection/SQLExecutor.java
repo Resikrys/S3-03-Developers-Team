@@ -1,4 +1,4 @@
-package util;
+package dbconnection;
 
 import java.sql.*;
 import java.util.function.Function;

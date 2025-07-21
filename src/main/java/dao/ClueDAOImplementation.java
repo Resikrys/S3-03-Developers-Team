@@ -2,7 +2,7 @@ package dao;
 
 import enums.Material;
 import model.ClueObject;
-import util.SQLExecutor;
+import dbconnection.SQLExecutor;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

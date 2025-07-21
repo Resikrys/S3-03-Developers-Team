@@ -5,7 +5,7 @@ import dao.ClueDao;
 import enums.Material;
 import exception.InvalidInputException;
 import model.ClueObject;
-import util.SQLExecutor;
+import dbconnection.SQLExecutor;
 import util.ScannerManager;
 
 import java.math.BigDecimal;
