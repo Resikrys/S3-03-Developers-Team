@@ -11,10 +11,15 @@ import manager.DecorationManager;
 
 public class MainMenu {
     private final InputHelper inputHelper;
-    private final RoomManager roomManager;
-    private final ClueManager clueManager;
+    private final RoomMenu roomMenu; // Now it's RoomMenu, not RoomManager
+    private final ClueManager clueManager; // Assuming these will also get their own menus later
     private final DecorationManager decorationManager;
     private final EscapeRoomManager escaperoomManager;
+//    private final InputHelper inputHelper;
+//    private final RoomManager roomManager;
+//    private final ClueManager clueManager;
+//    private final DecorationManager decorationManager;
+//    private final EscapeRoomManager escaperoomManager;
 //    private final PlayerManager playermanager;
 //    private final Ticketmanager ticketManager;
 //    private final Inventory inventory;
@@ -24,9 +29,12 @@ public class MainMenu {
 
         this.inputHelper = new InputHelper();
         this.escaperoomManager = new EscapeRoomManager(inputHelper);
-        this.roomManager = new RoomManager(inputHelper);
+        this.roomMenu  = new RoomMenu(inputHelper); //This works OK!!
         this.clueManager = new ClueManager(inputHelper);
         this.decorationManager = new DecorationManager(inputHelper);
+//        this.playerManager = new PlayerManager(inputHelper);
+//        this.ticketManager = new TicketManager(inputHelper);
+//        this.inventory = new Inventory(inputHelper);
 
     }
 
@@ -47,10 +55,11 @@ public class MainMenu {
 
                 switch (input) {
                     case 1:
+                        //escaperoomManager.showMenu();
                         escaperoomManager.handleEscapeRoomCrud(); //Change to showMenu when submenu available
                         break;
                     case 2:
-                        roomManager.showMenu();
+                        roomMenu .showMenu();
                         break;
                     case 3:
                         clueManager.showMenu();
