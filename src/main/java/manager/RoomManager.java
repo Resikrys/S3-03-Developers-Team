@@ -57,14 +57,14 @@ public class RoomManager {
                         System.out.println("Invalid option.");
                 }
             } catch (InvalidInputException e) {
-                System.err.println("Input error: " + e.getMessage() + ". Please try again.");
+                System.err.println("❌ Input error: " + e.getMessage() + ". Please try again.");
             } catch (RoomNotFoundException e) {
-                System.err.println("Error: " + e.getMessage());
+                System.err.println("❌ Error: " + e.getMessage());
             } catch (SQLException e) {
-                System.err.println("Database error in Room operation: " + e.getMessage());
+                System.err.println("❌ Database error in Room operation: " + e.getMessage());
                 e.printStackTrace();
             } catch (Exception e) {
-                System.err.println("Unexpected error in Room operation: " + e.getMessage());
+                System.err.println("❌ Unexpected error in Room operation: " + e.getMessage());
                 e.printStackTrace();
             }
         } while (roomChoice != 0);

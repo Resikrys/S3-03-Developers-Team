@@ -43,7 +43,7 @@ public class MainMenu {
                         clueManager.handleClueCrud();
                         break;
                     case 3:
-                        decorationManager.handleDecorationCrud();  // ✅ Añadida opción para objetos de decoración
+                        decorationManager.handleDecorationCrud();
                         break;
 
                     case 0:
