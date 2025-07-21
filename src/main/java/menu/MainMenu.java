@@ -11,16 +11,16 @@ import manager.DecorationManager;
 public class MainMenu {
     private final ScannerManager scannerManager;
     private final RoomManager roomManager;
-    private final ClueManager clueManager;
-    private final DecorationManager decorationManager;
+    private final ClueMenu clueMenu;
+    private final DecorationMenu decorationMenu;
 
     public MainMenu() {
         EnvLoader.getInstance();
 
         this.scannerManager = new ScannerManager();
         this.roomManager = new RoomManager(scannerManager);
-        this.clueManager = new ClueManager(scannerManager);
-        this.decorationManager = new DecorationManager(scannerManager);
+        this.clueMenu = new ClueMenu(scannerManager);
+        this.decorationMenu = new DecorationMenu(scannerManager);
 
     }
 
@@ -40,10 +40,10 @@ public class MainMenu {
                         roomManager.handleRoomCrud();
                         break;
                     case 2:
-                        clueManager.handleClueCrud();
+                        clueMenu.showMenu();
                         break;
                     case 3:
-                        decorationManager.handleDecorationCrud();  // ✅ Añadida opción para objetos de decoración
+                        decorationMenu.showMenu();  // ✅ Añadida opción para objetos de decoración
                         break;
 
                     case 0:
