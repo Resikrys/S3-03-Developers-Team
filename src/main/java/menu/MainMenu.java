@@ -8,7 +8,7 @@ import util.InputHelper;
 
 public class MainMenu {
     private final InputHelper inputHelper;
-    //private final EscapeRoomMenu escapeRoomMenu;
+    private final EscapeRoomMenu escapeRoomMenu;
     private final RoomMenu roomMenu; // Now it's RoomMenu, not RoomManager
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
@@ -24,7 +24,7 @@ public class MainMenu {
         EnvLoader.getInstance();
 
         this.inputHelper = new InputHelper();
-        //this.escaperoomManager = new EscapeRoomManager(inputHelper);
+        this.escapeRoomMenu = new EscapeRoomMenu(inputHelper);
         this.roomMenu  = new RoomMenu(inputHelper); //This works OK!!
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
@@ -51,8 +51,7 @@ public class MainMenu {
 
                 switch (input) {
                     case 1:
-                        //escaperoomManager.showMenu();
-                        //escaperoomManager.handleEscapeRoomCrud(); //Change to showMenu when submenu available
+                        escapeRoomMenu.showMenu();
                         break;
                     case 2:
                         roomMenu .showMenu();
