@@ -1,7 +1,7 @@
 package dao;
 
 import model.DecorationObject;
-
+import exception.DecorationNotFoundException;
 import java.sql.SQLException;
 import java.util.List;
 

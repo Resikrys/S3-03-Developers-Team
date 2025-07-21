@@ -2,17 +2,17 @@ package menu;
 
 import exception.DecorationNotFoundException;
 import manager.DecorationManager;
-import util.ScannerManager;
+import util.InputHelper;
 
 import java.sql.SQLException;
 
 public class DecorationMenu {
     private final DecorationManager decorationManager;
-    private final ScannerManager scanner;
+    private final InputHelper scanner;
 
-    public DecorationMenu(ScannerManager scannerManager) {
-        this.scanner = scannerManager;
-        this.decorationManager = new DecorationManager(scannerManager);
+    public DecorationMenu(InputHelper inputHelper) {
+        this.scanner = inputHelper;
+        this.decorationManager = new DecorationManager(inputHelper);
     }
 
     public void showMenu() {

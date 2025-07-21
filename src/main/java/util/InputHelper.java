@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ScannerManager {
+public class InputHelper {
     private final Scanner scanner;
 
-    public ScannerManager() {
+    public InputHelper() {
         this.scanner = new Scanner(System.in);
     }
 

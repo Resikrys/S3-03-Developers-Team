@@ -5,7 +5,7 @@ import dao.DecorationObjectDAO;
 import enums.Material;
 import exception.DecorationNotFoundException;
 import model.DecorationObject;
-import util.ScannerManager;
+import util.InputHelper;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -13,11 +13,11 @@ import java.util.List;
 
 public class DecorationManager {
     private final DecorationObjectDAO decorationDao;
-    private final ScannerManager scanner;
+    private final InputHelper scanner;
 
-    public DecorationManager(ScannerManager scannerManager) {
+    public DecorationManager(InputHelper inputHelper) {
         this.decorationDao = new DecorationDAOImplementation();
-        this.scanner = scannerManager;
+        this.scanner = inputHelper;
     }
 
     // Crea un nuevo objeto de decoración

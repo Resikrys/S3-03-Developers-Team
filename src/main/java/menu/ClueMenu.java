@@ -2,17 +2,17 @@ package menu;
 
 import exception.InvalidInputException;
 import manager.ClueManager;
-import util.ScannerManager;
+import util.InputHelper;
 
 import java.sql.SQLException;
 
 public class ClueMenu {
     private final ClueManager clueManager;
-    private final ScannerManager scanner;
+    private final InputHelper scanner;
 
-    public ClueMenu(ScannerManager scannerManager) {
-        this.clueManager = new ClueManager(scannerManager);
-        this.scanner = scannerManager;
+    public ClueMenu(InputHelper inputHelper) {
+        this.clueManager = new ClueManager(inputHelper);
+        this.scanner = inputHelper;
     }
 
     public void showMenu() {
