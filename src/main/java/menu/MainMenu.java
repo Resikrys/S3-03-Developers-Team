@@ -3,13 +3,13 @@ package menu;
 import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
 import manager.RoomManager;
-import util.ScannerManager;
+import util.InputHelper;
 import manager.ClueManager;
 import manager.DecorationManager;
 
 
 public class MainMenu {
-    private final ScannerManager scannerManager;
+    private final InputHelper inputHelper;
     private final RoomManager roomManager;
     private final ClueManager clueManager;
     private final DecorationManager decorationManager;
@@ -17,10 +17,10 @@ public class MainMenu {
     public MainMenu() {
         EnvLoader.getInstance();
 
-        this.scannerManager = new ScannerManager();
-        this.roomManager = new RoomManager(scannerManager);
-        this.clueManager = new ClueManager(scannerManager);
-        this.decorationManager = new DecorationManager(scannerManager);
+        this.inputHelper = new InputHelper();
+        this.roomManager = new RoomManager(inputHelper);
+        this.clueManager = new ClueManager(inputHelper);
+        this.decorationManager = new DecorationManager(inputHelper);
 
     }
 
@@ -33,7 +33,7 @@ public class MainMenu {
                 System.out.println("2. CRUD Operations -> Clues");
                 System.out.println("3. CRUD Operations -> Decoration Objects");
                 System.out.println("0. Exit");
-                input = scannerManager.readInt("Select option: ");
+                input = inputHelper.readInt("Select option: ");
 
                 switch (input) {
                     case 1:
@@ -61,7 +61,7 @@ public class MainMenu {
             System.err.println("An unexpected error occurred in the main menu: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            scannerManager.closeScanner();
+            inputHelper.closeScanner();
             DatabaseConnection.getInstance().closeConnection();
         }
     }

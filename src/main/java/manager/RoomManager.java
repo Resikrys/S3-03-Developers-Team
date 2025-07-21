@@ -5,7 +5,7 @@ import dao.RoomDaoImplementation;
 import exception.InvalidInputException;
 import exception.RoomNotFoundException;
 import model.Room;
-import util.ScannerManager;
+import util.InputHelper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,11 +13,11 @@ import java.util.Optional;
 
 public class RoomManager {
     private final RoomDao roomDao;
-    private final ScannerManager scanner;
+    private final InputHelper scanner;
 
-    public RoomManager(ScannerManager scannerManager) {
+    public RoomManager(InputHelper inputHelper) {
         this.roomDao = new RoomDaoImplementation();
-        this.scanner = scannerManager;
+        this.scanner = inputHelper;
     }
 
     public void handleRoomCrud() {

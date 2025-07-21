@@ -6,7 +6,7 @@ import enums.Material;
 import exception.InvalidInputException;
 import model.ClueObject;
 import dbconnection.SQLExecutor;
-import util.ScannerManager;
+import util.InputHelper;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class ClueManager {
     private final ClueDao clueDAO;
-    private final ScannerManager scanner;
+    private final InputHelper scanner;
 
-    public ClueManager(ScannerManager scannerManager) {
+    public ClueManager(InputHelper inputHelper) {
         this.clueDAO = new ClueDAOImplementation(new SQLExecutor()); // DAO implementado
-        this.scanner = scannerManager;
+        this.scanner = inputHelper;
     }
     public void handleClueCrud() {
         int choice;
