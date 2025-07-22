@@ -22,3 +22,8 @@ services:
 
 volumes:
   db_data:
+
+#    mongodb:
+#      uri: mongodb://localhost:27017
+#      database: escapeRoomNotifications
+#      collection: playerSubscriptions
