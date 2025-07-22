@@ -153,3 +153,8 @@ docker-compose exec mysql-db mysql -u root -p
 ## App features: (cosas que hace la app)
 
 ## Documentation
+
+## MongoDB String connection:
+mongodb://escaperoom_mongo_user:12345@localhost:27017/escapeRoomMongo?authSource=admin
+
+mongodb://localhost:27017 --> if you haven't enabled authentication on the Docker container

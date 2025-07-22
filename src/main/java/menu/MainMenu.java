@@ -4,6 +4,7 @@ import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
 import manager.EscapeRoomManager;
 import util.InputHelper;
+import dbconnection.MongoDBConnection;
 
 
 public class MainMenu {
@@ -19,9 +20,16 @@ public class MainMenu {
 //    private final PlayerManager playermanager;
 //    private final Ticketmanager ticketManager;
 //    private final Inventory inventory;
+    private final RewardMenu rewardMenu;
 
     public MainMenu() {
+        // 1. Load environment variables first
         EnvLoader.getInstance();
+        // 2. Initialize database connections
+        // This connects to MySQL
+        DatabaseConnection.getInstance();
+        // This connects to MongoDB
+        MongoDBConnection.getDatabaseInstance();
 
         this.inputHelper = new InputHelper();
         this.escapeRoomMenu = new EscapeRoomMenu(inputHelper);
@@ -31,6 +39,7 @@ public class MainMenu {
 //        this.playerManager = new PlayerManager(inputHelper);
 //        this.ticketManager = new TicketManager(inputHelper);
 //        this.inventory = new Inventory(inputHelper);
+        this.rewardMenu = new RewardMenu(inputHelper);
 
     }
 
@@ -46,6 +55,7 @@ public class MainMenu {
                 System.out.println("5. CRUD Operations -> Player");
                 System.out.println("6. CRUD Operations -> Ticket");
                 System.out.println("7. CRUD Operations -> Inventory");
+                System.out.println("8. CRUD Operations -> Rewards");
                 System.out.println("0. Exit");
                 input = inputHelper.readInt("Select option: ");
 
@@ -71,6 +81,9 @@ public class MainMenu {
                     case 7:
                         //inventory.showMenu();
                         break;
+                    case 8:
+                        rewardMenu.showMenu();
+                        break;
 
                     case 0:
                         System.out.println("Exiting the application. See you soon!");
@@ -89,6 +102,7 @@ public class MainMenu {
         } finally {
             inputHelper.closeScanner();
             DatabaseConnection.getInstance().closeConnection();
+            MongoDBConnection.closeConnection();
         }
     }
 }
