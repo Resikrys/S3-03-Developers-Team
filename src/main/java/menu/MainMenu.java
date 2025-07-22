@@ -1,9 +1,12 @@
 package menu;
 
+import dao.*;
 import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
 import manager.EscapeRoomManager;
+import manager.InventoryService;
 import util.InputHelper;
+import manager.InventoryService;
 
 
 public class MainMenu {
@@ -12,6 +15,7 @@ public class MainMenu {
     private final RoomMenu roomMenu; // Now it's RoomMenu, not RoomManager
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
+    private final InventoryService inventoryService;
 //    private final ClueManager clueManager; // Assuming these will also get their own menus later
 //    private final DecorationManager decorationManager;
 //    private final EscapeRoomManager escaperoomManager;
@@ -28,6 +32,12 @@ public class MainMenu {
         this.roomMenu  = new RoomMenu(inputHelper); //This works OK!!
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
+        this.inventoryService = new InventoryService(
+                new RoomDaoImplementation(),
+                new ClueDAOImplementation(),
+                new DecorationDAOImplementation()
+        );
+
 //        this.playerManager = new PlayerManager(inputHelper);
 //        this.ticketManager = new TicketManager(inputHelper);
 //        this.inventory = new Inventory(inputHelper);
@@ -69,7 +79,7 @@ public class MainMenu {
                         //ticketManager.showMenu();
                         break;
                     case 7:
-                        //inventory.showMenu();
+                        inventoryService.showMenu(inputHelper);
                         break;
 
                     case 0:
