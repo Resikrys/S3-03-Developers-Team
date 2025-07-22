@@ -40,7 +40,7 @@ public class MainMenu {
 
 //        this.playerManager = new PlayerManager(inputHelper);
 //        this.ticketManager = new TicketManager(inputHelper);
-//        this.inventory = new Inventory(inputHelper);
+
 
     }
 

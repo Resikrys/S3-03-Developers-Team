@@ -43,6 +43,12 @@ CREATE TABLE DecorationObject (
     room_id INT,
     FOREIGN KEY (room_id) REFERENCES Room(id)
 );
+INSERT INTO DecorationObject (name, price, material, room_id) VALUES
+('Antique Candlestick', 29.99, 'WOOD', 1),
+('Wall Painting: Ghostly Manor', 49.50, 'WOOD', 1),
+('Rusty Vault Door', 89.00, 'WOOD', 1),
+('Holographic Map', 74.95, 'WOOD', 1),
+('Plasma Lamp', 32.80, 'WOOD', 1);
 
 CREATE TABLE ClueObject (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -55,6 +61,12 @@ CREATE TABLE ClueObject (
     room_id INT,
     FOREIGN KEY (room_id) REFERENCES Room(id)
 );
+INSERT INTO ClueObject (name, price, material, puzzle_description, solved, reward_id, room_id) VALUES
+('Mysterious Skull', 19.99, 'WOOD', 'Solve the riddle carved on the jaw to unlock the secret compartment.', FALSE, NULL, 1),
+('Encrypted Diary', 34.50, 'WOOD', 'Decode the diary entries to find the location of the hidden lever.', TRUE, NULL, 1),
+('Laser-etched Keycard', 15.75, 'WOOD', 'Scan the pattern in the right orientation to open the lab door.', FALSE, NULL, 1),
+('Rusty Timepiece', 22.10, 'WOOD', 'Adjust the hands to the correct time based on clues scattered around.', FALSE, NULL, 1),
+('Ghost Painting', 41.00, 'WOOD', 'Find what’s wrong in the brushstrokes to reveal a hidden message.', TRUE, NULL, 1);
 
 CREATE TABLE Player (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -64,6 +76,14 @@ CREATE TABLE Player (
     escape_room_id INT,
     FOREIGN KEY (escape_room_id) REFERENCES EscapeRoom(id)
 );
+INSERT INTO Player (name, email, registered, escape_room_id) VALUES
+('Laura Sánchez', 'laura.sanchez@example.com', TRUE, 1),
+('Carlos Romero', 'carlos.romero@example.com', FALSE, 1),
+('Marta Gil', 'marta.gil@example.com', TRUE, 1),
+('David Pérez', 'david.perez@example.com', TRUE, 1),
+('Lucía Torres', 'lucia.torres@example.com', FALSE, 1),
+('Andrés Molina', 'andres.molina@example.com', TRUE, 1),
+('Eva Ríos', 'eva.rios@example.com', TRUE, 1),
 
 CREATE TABLE Ticket (
     id INT PRIMARY KEY AUTO_INCREMENT,
