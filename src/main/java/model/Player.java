@@ -1,6 +1,8 @@
 package model;
 
-public class Player {
+import observer.Observer;
+
+public class Player implements Observer{
     private int id;
     private String name;
     private String email;
@@ -36,6 +38,12 @@ public class Player {
 
     public int getEscapeRoomId() { return escapeRoomId; }
     public void setEscapeRoomId(int escapeRoomId) { this.escapeRoomId = escapeRoomId; }
+
+    @Override
+    public void update(String message) {
+        System.out.println("📣 [NOTIFICATION for " + name + "]: " + message);
+    }
+
 
     @Override
     public String toString() {

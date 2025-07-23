@@ -4,39 +4,35 @@ import dao.*;
 import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
 import dbconnection.SQLExecutor;
-import manager.EscapeRoomManager;
-import manager.InventoryService;
-import manager.PlayerManager;
+import manager.*;
+import manager.NotificationManager;
 import util.InputHelper;
-import manager.InventoryService;
-
 
 public class MainMenu {
     private final InputHelper inputHelper;
     private final EscapeRoomMenu escapeRoomMenu;
-    private final RoomMenu roomMenu; // Now it's RoomMenu, not RoomManager
+    private final RoomMenu roomMenu;
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
     private final InventoryService inventoryService;
     private final PlayerMenu playerMenu;
-//    private final ClueManager clueManager; // Assuming these will also get their own menus later
-//    private final DecorationManager decorationManager;
-//    private final EscapeRoomManager escaperoomManager;
-//    private final EscapeRoomManager escaperoomManager;
-//    private final PlayerManager playermanager;
-//    private final Ticketmanager ticketManager;
-//    private final Inventory inventory;
 
     public MainMenu() {
-        EnvLoader.getInstance();
+        EnvLoader.getInstance(); // Carga .env si lo usas
 
         this.inputHelper = new InputHelper();
+        SQLExecutor executor = new SQLExecutor();
+
+        // DAO y managers
+        PlayerDao playerDao = new PlayerDaoImplementation(executor);
+        PlayerManager playerManager = new PlayerManager(playerDao, inputHelper);
+        NotificationManager notificationManager = new NotificationManager();  // Observer aquí
+
+        // Menús
         this.escapeRoomMenu = new EscapeRoomMenu(inputHelper);
-        this.roomMenu  = new RoomMenu(inputHelper); //This works OK!!
+        this.roomMenu = new RoomMenu(inputHelper, playerDao, notificationManager);  // Notificación integrada
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
-        PlayerDao playerDao = new PlayerDaoImplementation(new SQLExecutor());
-        PlayerManager playerManager = new PlayerManager(playerDao, inputHelper);
         this.playerMenu = new PlayerMenu(playerManager, inputHelper);
 
         this.inventoryService = new InventoryService(
@@ -44,11 +40,6 @@ public class MainMenu {
                 new ClueDAOImplementation(),
                 new DecorationDAOImplementation()
         );
-
-//        this.playerManager = new PlayerManager(inputHelper);
-//        this.ticketManager = new TicketManager(inputHelper);
-
-
     }
 
     public void start() {
@@ -61,51 +52,30 @@ public class MainMenu {
                 System.out.println("3. CRUD Operations -> Clues");
                 System.out.println("4. CRUD Operations -> Decoration Objects");
                 System.out.println("5. CRUD Operations -> Player");
-                System.out.println("6. CRUD Operations -> Ticket");
-                System.out.println("7. CRUD Operations -> Inventory");
-                System.out.println("8. CRUD Operations -> Player");
+                System.out.println("6. CRUD Operations -> Ticket (Not implemented)");
+                System.out.println("7. Inventory Overview");
                 System.out.println("0. Exit");
+
                 input = inputHelper.readInt("Select option: ");
 
                 switch (input) {
-                    case 1:
-                        escapeRoomMenu.showMenu();
-                        break;
-                    case 2:
-                        roomMenu .showMenu();
-                        break;
-                    case 3:
-                        clueMenu.showMenu();
-                        break;
-                    case 4:
-                        decorationMenu.showMenu();
-                        break;
-                    case 5:
-                        playerMenu.showMenu();
-                        break;
-                    case 6:
-                        //ticketManager.showMenu();
-                        break;
-                    case 7:
-                        inventoryService.showMenu(inputHelper);
-                        break;
-                    case 8:
-                        playerMenu.showMenu();
-                        break;
-
-                    case 0:
-                        System.out.println("Exiting the application. See you soon!");
-                        break;
-                    default:
-                        System.out.println("Invalid option. Select again: ");
+                    case 1 -> escapeRoomMenu.showMenu();
+                    case 2 -> roomMenu.showMenu();
+                    case 3 -> clueMenu.showMenu();
+                    case 4 -> decorationMenu.showMenu();
+                    case 5 -> playerMenu.showMenu();
+                    case 6 -> System.out.println("⚠️ Ticket module not yet implemented.");
+                    case 7 -> inventoryService.showMenu(inputHelper);
+                    case 0 -> System.out.println("👋 Exiting the application. See you soon!");
+                    default -> System.out.println("❌ Invalid option. Please try again.");
                 }
             } while (input != 0);
 
         } catch (RuntimeException e) {
-            System.err.println("Fatal error launching application: " + e.getMessage());
+            System.err.println("💥 Fatal error launching application: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred in the main menu: " + e.getMessage());
+            System.err.println("❌ Unexpected error in Main Menu: " + e.getMessage());
             e.printStackTrace();
         } finally {
             inputHelper.closeScanner();
