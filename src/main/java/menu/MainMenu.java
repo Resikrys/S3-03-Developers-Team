@@ -3,10 +3,9 @@ package menu;
 import dao.*;
 import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
-import manager.EscapeRoomManager;
+import dbconnection.MongoDBConnection;
 import manager.InventoryService;
 import util.InputHelper;
-import manager.InventoryService;
 
 
 public class MainMenu {
@@ -16,32 +15,32 @@ public class MainMenu {
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
     private final InventoryService inventoryService;
-//    private final ClueManager clueManager; // Assuming these will also get their own menus later
-//    private final DecorationManager decorationManager;
-//    private final EscapeRoomManager escaperoomManager;
-//    private final EscapeRoomManager escaperoomManager;
+    private final RewardMenu rewardMenu;
+
 //    private final PlayerManager playermanager;
 //    private final Ticketmanager ticketManager;
-//    private final Inventory inventory;
 
     public MainMenu() {
         EnvLoader.getInstance();
+        // 2. Initialize database connections
+        // This connects to MySQL
+        DatabaseConnection.getInstance();
+        // This connects to MongoDB
+        MongoDBConnection.getDatabaseInstance();
 
         this.inputHelper = new InputHelper();
         this.escapeRoomMenu = new EscapeRoomMenu(inputHelper);
-        this.roomMenu  = new RoomMenu(inputHelper); //This works OK!!
+        this.roomMenu  = new RoomMenu(inputHelper);
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
+        //        this.playerManager = new PlayerManager(inputHelper);
+        //this.ticketManager = new TicketManager(inputHelper);
         this.inventoryService = new InventoryService(
                 new RoomDaoImplementation(),
                 new ClueDAOImplementation(),
                 new DecorationDAOImplementation()
         );
-
-//        this.playerManager = new PlayerManager(inputHelper);
-//        this.ticketManager = new TicketManager(inputHelper);
-
-
+        this.rewardMenu = new RewardMenu(inputHelper);
     }
 
     public void start() {
@@ -56,6 +55,7 @@ public class MainMenu {
                 System.out.println("5. CRUD Operations -> Player");
                 System.out.println("6. CRUD Operations -> Ticket");
                 System.out.println("7. CRUD Operations -> Inventory");
+                System.out.println("8. CRUD Operations -> Rewards");
                 System.out.println("0. Exit");
                 input = inputHelper.readInt("Select option: ");
 
@@ -81,7 +81,9 @@ public class MainMenu {
                     case 7:
                         inventoryService.showMenu(inputHelper);
                         break;
-
+                    case 8:
+                        rewardMenu.showMenu();
+                        break;
                     case 0:
                         System.out.println("Exiting the application. See you soon!");
                         break;
@@ -99,6 +101,7 @@ public class MainMenu {
         } finally {
             inputHelper.closeScanner();
             DatabaseConnection.getInstance().closeConnection();
+            MongoDBConnection.closeConnection();
         }
     }
 }
