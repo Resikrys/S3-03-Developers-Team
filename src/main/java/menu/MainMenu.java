@@ -4,7 +4,9 @@ import dao.*;
 import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
 import dbconnection.MongoDBConnection;
+import dbconnection.SQLExecutor;
 import manager.InventoryService;
+import manager.PlayerManager;
 import util.InputHelper;
 
 
@@ -14,10 +16,10 @@ public class MainMenu {
     private final RoomMenu roomMenu; // Now it's RoomMenu, not RoomManager
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
+    private final PlayerMenu playerMenu;
     private final InventoryService inventoryService;
     private final RewardMenu rewardMenu;
 
-//    private final PlayerManager playermanager;
 //    private final Ticketmanager ticketManager;
 
     public MainMenu() {
@@ -33,7 +35,9 @@ public class MainMenu {
         this.roomMenu  = new RoomMenu(inputHelper);
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
-        //        this.playerManager = new PlayerManager(inputHelper);
+        PlayerDao playerDao = new PlayerDaoImplementation(new SQLExecutor()); //!!
+        PlayerManager playerManager = new PlayerManager(playerDao, inputHelper); //!!
+        this.playerMenu = new PlayerMenu(playerManager, inputHelper); //!!
         //this.ticketManager = new TicketManager(inputHelper);
         this.inventoryService = new InventoryService(
                 new RoomDaoImplementation(),
@@ -73,7 +77,7 @@ public class MainMenu {
                         decorationMenu.showMenu();
                         break;
                     case 5:
-                        //playerManager.showMenu();
+                        playerMenu.showMenu();
                         break;
                     case 6:
                         //ticketManager.showMenu();
