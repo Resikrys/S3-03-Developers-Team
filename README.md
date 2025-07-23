@@ -158,3 +158,25 @@ docker-compose exec mysql-db mysql -u root -p
 mongodb://escaperoom_mongo_user:12345@localhost:27017/escapeRoomMongo?authSource=admin
 
 mongodb://localhost:27017 --> if you haven't enabled authentication on the Docker container
+
+## MongoDB String connection WARNINGS:
+WARNING: SLF4J not found on the classpath. Logging is disabled for the 'org.bson' component
+WARNING: SLF4J not found on the classpath. Logging is disabled for the 'org.mongodb.driver' component
+
+These are not errors that prevent your application from running. They are 
+just warnings from the MongoDB Java driver (and BSON library) telling you 
+that they tried to use SLF4J (Simple Logging Facade for Java) for logging 
+their internal operations, but couldn't find an SLF4J implementation (like 
+Logback or Log4j2) on your classpath.
+Añadir al pom:
+
+```
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>2.0.7</version> <scope>runtime</scope>
+</dependency>
+```
+If you don't care about seeing MongoDB's internal logs, you can safely 
+ignore these warnings for now. They are informational and do not stop your 
+application's logic.

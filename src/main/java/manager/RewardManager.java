@@ -74,7 +74,8 @@ public class RewardManager {
         }
     }
 
-    public void updateReward() {
+    //@Override
+    public void updateReward() { // Changed to public as per interface (if applicable)
         System.out.println("\n--- Update Reward ---");
         String idString = inputHelper.readString("Enter ID of the reward to update: ");
         try {
@@ -89,13 +90,27 @@ public class RewardManager {
                 String newEscapeRoomName = inputHelper.readString("New escape room name (current: " + existingReward.getEscapeRoomName() + "): ");
                 String newCertificateMessage = inputHelper.readString("New certificate message (current: " + existingReward.getCertificateMessage() + "): ");
 
-                boolean hasNewSpecialReward = inputHelper.readBoolean("Update special message? (yes/no, current: " + existingReward.getSpecialReward().orElse("None") + "): ");
-                if (hasNewSpecialReward) {
-                    String newSpecialMessage = inputHelper.readString("Enter new special message: ");
-                    existingReward.setSpecialReward(newSpecialMessage);
+                // --- IMPORTANT FIXES BELOW ---
+
+                // Determine current special reward display for user clarity
+                String currentSpecialRewardDisplay = (existingReward.getSpecialRewardDetails() != null && !existingReward.getSpecialRewardDetails().isEmpty()) ?
+                        existingReward.getSpecialRewardDetails() : "None";
+
+                boolean updateSpecialReward = inputHelper.readBoolean("Update special message? (yes/no, current: " + currentSpecialRewardDisplay + "): ");
+
+                if (updateSpecialReward) {
+                    String newSpecialMessage = inputHelper.readString("Enter new special message (leave empty to clear): ");
+                    // Set to null if user enters an empty string, otherwise set the message
+                    existingReward.setSpecialRewardDetails(newSpecialMessage.isEmpty() ? null : newSpecialMessage);
                 } else {
-                    existingReward.setSpecialReward((Optional<String>) null); // Clear special message if no longer desired
+                    // If user chooses NOT to update special message, keep its current value
+                    // If the intent is to explicitly clear it when "no" is chosen to "Update special message?",
+                    // then change this to existingReward.setSpecialRewardDetails(null);
+                    // For now, I'm assuming "no" means "keep as is".
+                    // If you want "no" to mean "clear", then change this else block to:
+                    // existingReward.setSpecialRewardDetails(null);
                 }
+
 
                 existingReward.setPlayerName(newPlayerName);
                 existingReward.setEscapeRoomName(newEscapeRoomName);
