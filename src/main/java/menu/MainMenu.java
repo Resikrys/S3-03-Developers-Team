@@ -3,8 +3,10 @@ package menu;
 import dao.*;
 import dbconnection.DatabaseConnection;
 import dbconnection.EnvLoader;
+import dbconnection.SQLExecutor;
 import manager.EscapeRoomManager;
 import manager.InventoryService;
+import manager.PlayerManager;
 import util.InputHelper;
 import manager.InventoryService;
 
@@ -16,6 +18,7 @@ public class MainMenu {
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
     private final InventoryService inventoryService;
+    private final PlayerMenu playerMenu;
 //    private final ClueManager clueManager; // Assuming these will also get their own menus later
 //    private final DecorationManager decorationManager;
 //    private final EscapeRoomManager escaperoomManager;
@@ -32,6 +35,10 @@ public class MainMenu {
         this.roomMenu  = new RoomMenu(inputHelper); //This works OK!!
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
+        PlayerDao playerDao = new PlayerDaoImplementation(new SQLExecutor());
+        PlayerManager playerManager = new PlayerManager(playerDao, inputHelper);
+        this.playerMenu = new PlayerMenu(playerManager, inputHelper);
+
         this.inventoryService = new InventoryService(
                 new RoomDaoImplementation(),
                 new ClueDAOImplementation(),
@@ -56,6 +63,7 @@ public class MainMenu {
                 System.out.println("5. CRUD Operations -> Player");
                 System.out.println("6. CRUD Operations -> Ticket");
                 System.out.println("7. CRUD Operations -> Inventory");
+                System.out.println("8. CRUD Operations -> Player");
                 System.out.println("0. Exit");
                 input = inputHelper.readInt("Select option: ");
 
@@ -73,13 +81,16 @@ public class MainMenu {
                         decorationMenu.showMenu();
                         break;
                     case 5:
-                        //playerManager.showMenu();
+                        playerMenu.showMenu();
                         break;
                     case 6:
                         //ticketManager.showMenu();
                         break;
                     case 7:
                         inventoryService.showMenu(inputHelper);
+                        break;
+                    case 8:
+                        playerMenu.showMenu();
                         break;
 
                     case 0:
