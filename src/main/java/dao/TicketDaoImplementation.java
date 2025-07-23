@@ -11,14 +11,14 @@ import java.util.Optional;
 
 public class TicketDaoImplementation implements TicketDAO {
 
-    private final SQLExecutor sqlExecutor;
+    private SQLExecutor sqlExecutor;
 
     public TicketDaoImplementation() {
         this.sqlExecutor = new SQLExecutor();
     }
 
     @Override
-    public void create(Ticket ticket) throws SQLException {
+    public void createTicket(Ticket ticket) throws SQLException {
         String sql = "INSERT INTO Ticket (price, player_id, escape_room_id) VALUES (?, ?, ?)";
         try {
             sqlExecutor.executeUpdate(
@@ -49,8 +49,8 @@ public class TicketDaoImplementation implements TicketDAO {
                             ));
                         }
                     } catch (SQLException e) {
-                        System.err.println("❌ Error processing ResultSet for Ticket ID " + id + ": " + e.getMessage());
-                        throw new RuntimeException(e);
+                        System.err.println("❌ Error reading Ticket by ID: " + e.getMessage());
+                        e.printStackTrace();
                     }
                     return Optional.empty();
                 },
@@ -59,7 +59,7 @@ public class TicketDaoImplementation implements TicketDAO {
     }
 
     @Override
-    public List<Ticket> getAll() throws SQLException {
+    public List<Ticket> getAllTickets() throws SQLException {
         List<Ticket> tickets = new ArrayList<>();
         String sql = "SELECT id, price, player_id, escape_room_id FROM Ticket";
 
@@ -76,18 +76,17 @@ public class TicketDaoImplementation implements TicketDAO {
                             ));
                         }
                     } catch (SQLException e) {
-                        System.err.println("❌ Error processing ResultSet for Tickets: " + e.getMessage());
-                        throw new RuntimeException(e);
+                        System.err.println("❌ Error processing all Tickets: " + e.getMessage());
+                        e.printStackTrace();
                     }
                     return null;
                 }
         );
-
         return tickets;
     }
 
     @Override
-    public void update(Ticket ticket) throws SQLException, TicketNotFoundException {
+    public void updateTicket(Ticket ticket) throws SQLException, TicketNotFoundException {
         String sql = "UPDATE Ticket SET price = ?, player_id = ?, escape_room_id = ? WHERE id = ?";
         int rowsAffected = sqlExecutor.executeUpdate(
                 sql,
@@ -96,19 +95,53 @@ public class TicketDaoImplementation implements TicketDAO {
                 ticket.getEscapeRoomId(),
                 ticket.getId()
         );
-
         if (rowsAffected == 0) {
             throw new TicketNotFoundException("Ticket with ID " + ticket.getId() + " not found for update.");
         }
     }
 
     @Override
-    public void delete(int id) throws SQLException, TicketNotFoundException {
+    public void deleteTicket(int id) throws SQLException, TicketNotFoundException {
         String sql = "DELETE FROM Ticket WHERE id = ?";
         int rowsAffected = sqlExecutor.executeUpdate(sql, id);
-
         if (rowsAffected == 0) {
             throw new TicketNotFoundException("Ticket with ID " + id + " not found for deletion.");
         }
+    }
+
+    @Override
+    public int countTicketsByPlayerId(int playerId) throws SQLException {
+        String sql = "SELECT COUNT(*) AS count FROM Ticket WHERE player_id = ?";
+        return sqlExecutor.executeQuery(
+                sql,
+                rs -> {
+                    try {
+                        return rs.next() ? rs.getInt("count") : 0;
+                    } catch (SQLException e) {
+                        System.err.println("❌ Error counting tickets by player ID: " + e.getMessage());
+                        e.printStackTrace();
+                        throw new RuntimeException(e);  // O maneja como prefieras
+                    }
+                },
+                playerId
+        );
+    }
+
+    @Override
+    public int countTicketsByEscapeRoomId(int escapeRoomId) throws SQLException {
+        String sql = "SELECT COUNT(*) AS count FROM Ticket WHERE escape_room_id = ?";
+        return sqlExecutor.executeQuery(
+                sql,
+                rs -> {
+                    try {
+                        return rs.next() ? rs.getInt("count") : 0;
+                    } catch (SQLException e) {
+                        System.err.println("❌ Error counting tickets by escape room ID: " + e.getMessage());
+                        e.printStackTrace();
+                        throw new RuntimeException(e);  // O maneja como prefieras
+                    }
+                },
+                escapeRoomId
+        );
     }
 }

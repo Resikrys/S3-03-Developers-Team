@@ -8,14 +8,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TicketDAO {
-
-    void create(Ticket ticket) throws SQLException;
+    void createTicket(Ticket ticket) throws SQLException;
 
     Optional<Ticket> getTicketById(int id) throws SQLException;
 
-    List<Ticket> getAll() throws SQLException;
+    List<Ticket> getAllTickets() throws SQLException;
 
-    void update(Ticket ticket) throws SQLException, TicketNotFoundException;
+    void updateTicket(Ticket ticket) throws SQLException;
 
-    void delete(int id) throws SQLException, TicketNotFoundException;
+    void deleteTicket(int id) throws SQLException;
+
+    int countTicketsByPlayerId(int playerId) throws SQLException;
+
+    int countTicketsByEscapeRoomId(int escapeRoomId) throws SQLException;
 }
