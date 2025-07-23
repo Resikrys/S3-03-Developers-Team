@@ -26,6 +26,9 @@ import dbconnection.EnvLoader;
 import java.time.Duration; // <-- NEW IMPORT FOR DURATION
 import java.util.Collections; // For Collections.singletonList
 
+// NEW IMPORTS FOR AUTHENTICATION
+import com.mongodb.MongoCredential; // <-- ADD THIS IMPORT
+
 
 public class MongoDBConnection {
     private static volatile MongoClient mongoClientInstance;
@@ -34,6 +37,11 @@ public class MongoDBConnection {
     private static final String MONGO_HOST_KEY = "MONGO_HOST";
     private static final String MONGO_PORT_KEY = "MONGO_PORT";
     private static final String MONGO_DATABASE_KEY = "MONGO_DATABASE";
+
+    // NEW CONSTANTS FOR AUTHENTICATION
+    private static final String MONGO_USERNAME_KEY = "MONGO_USER"; // As defined in .env
+    private static final String MONGO_PASSWORD_KEY = "MONGO_PASSWORD"; // As defined in .env
+    private static final String MONGO_AUTH_DATABASE = "admin"; // Authentication database for the root user
 
     private MongoDBConnection() {}
 
@@ -49,12 +57,18 @@ public class MongoDBConnection {
 
                 String mongoHost = envLoader.getEnv(MONGO_HOST_KEY);
                 String mongoPortStr = envLoader.getEnv(MONGO_PORT_KEY);
+                // NEW: Get username and password from .env
+                String mongoUser = envLoader.getEnv(MONGO_USERNAME_KEY);
+                String mongoPassword = envLoader.getEnv(MONGO_PASSWORD_KEY);
 
                 if (mongoHost == null || mongoHost.isEmpty()) {
                     throw new IllegalStateException("MongoDB Host ('" + MONGO_HOST_KEY + "') not found or is empty in .env.");
                 }
                 if (mongoPortStr == null || mongoPortStr.isEmpty()) {
                     throw new IllegalStateException("MongoDB Port ('" + MONGO_PORT_KEY + "') not found or is empty in .env.");
+                }
+                if (mongoUser == null || mongoUser.isEmpty() || mongoPassword == null || mongoPassword.isEmpty()) {
+                    throw new IllegalStateException("MongoDB Username or Password ('" + MONGO_USERNAME_KEY + "'/'" + MONGO_PASSWORD_KEY + "') not found or is empty in .env.");
                 }
 
                 int mongoPort;
@@ -63,6 +77,9 @@ public class MongoDBConnection {
                 } catch (NumberFormatException e) {
                     throw new IllegalStateException("MongoDB Port ('" + MONGO_PORT_KEY + "') is not a valid integer in .env.", e);
                 }
+
+                // Create MongoDB credentials using the username, authentication database, and password
+                MongoCredential credential = MongoCredential.createCredential(mongoUser, MONGO_AUTH_DATABASE, mongoPassword.toCharArray());
 
                 // --- CODEC REGISTRY ---
                 CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
@@ -78,6 +95,7 @@ public class MongoDBConnection {
                 MongoClientSettings settings = MongoClientSettings.builder()
                         .applyToClusterSettings(builder ->
                                 builder.hosts(Collections.singletonList(new ServerAddress(mongoHost, mongoPort))))
+                        .credential(credential) // <-- ADD THIS LINE FOR AUTHENTICATION
                         .codecRegistry(customCodecRegistry) // REGISTER THE CODEC REGISTRY HERE
                         .applyToConnectionPoolSettings(builder -> builder.maxWaitTime(10, TimeUnit.SECONDS) // This should now resolve
                                 .maxSize(100)
@@ -138,3 +156,10 @@ public class MongoDBConnection {
         }
     }
 }
+
+//Key Changes:
+//New Imports: import com.mongodb.MongoCredential;
+//New Constants: MONGO_USERNAME_KEY, MONGO_PASSWORD_KEY, and MONGO_AUTH_DATABASE (set to "admin").
+//Read User/Pass: Retrieve MONGO_USER and MONGO_PASSWORD from EnvLoader.
+//Create MongoCredential: MongoCredential.createCredential(mongoUser, MONGO_AUTH_DATABASE, mongoPassword.toCharArray());
+//Apply Credential: Added .credential(credential) to the MongoClientSettings.builder().
