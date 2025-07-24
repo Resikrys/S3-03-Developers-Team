@@ -1,11 +1,19 @@
 package model;
 
+import observer.Observer;
+import observer.NotificationEvent;
+import observer.EventType;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
     private int id;
     private String name;
     private String email;
     private boolean registered;
     private int escapeRoomId;
+    private final List<String> notifications = new ArrayList<>();
 
     public Player() {}
 
@@ -35,6 +43,14 @@ public class Player {
 
     public int getEscapeRoomId() { return escapeRoomId; }
     public void setEscapeRoomId(int escapeRoomId) { this.escapeRoomId = escapeRoomId; }
+
+    public void addNotification(String notification) { // <-- NEW METHOD
+        this.notifications.add(notification);
+    }
+
+    public List<String> getNotifications() { // <-- NEW METHOD (for displaying)
+        return new ArrayList<>(notifications);
+    }
 
     @Override
     public String toString() {
