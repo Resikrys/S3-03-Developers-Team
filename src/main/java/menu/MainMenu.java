@@ -7,6 +7,7 @@ import dbconnection.MongoDBConnection;
 import dbconnection.SQLExecutor;
 import manager.InventoryService;
 import manager.PlayerManager;
+import menu.TicketMenu;
 import util.InputHelper;
 
 
@@ -19,6 +20,7 @@ public class MainMenu {
     private final PlayerMenu playerMenu;
     private final InventoryService inventoryService;
     private final RewardMenu rewardMenu;
+    private final TicketMenu ticketMenu;
 
 //    private final Ticketmanager ticketManager;
 
@@ -38,7 +40,7 @@ public class MainMenu {
         PlayerDao playerDao = new PlayerDaoImplementation(new SQLExecutor()); //!!
         PlayerManager playerManager = new PlayerManager(playerDao, inputHelper); //!!
         this.playerMenu = new PlayerMenu(playerManager, inputHelper); //!!
-        //this.ticketManager = new TicketManager(inputHelper);
+        this.ticketMenu = new TicketMenu(inputHelper);
         this.inventoryService = new InventoryService(
                 new RoomDaoImplementation(),
                 new ClueDAOImplementation(),
@@ -80,7 +82,7 @@ public class MainMenu {
                         playerMenu.showMenu();
                         break;
                     case 6:
-                        //ticketManager.showMenu();
+                        ticketMenu.showMenu();
                         break;
                     case 7:
                         inventoryService.showMenu(inputHelper);
