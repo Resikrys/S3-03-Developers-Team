@@ -42,8 +42,10 @@ public class TicketMenu {
         System.out.println("3. List All Tickets");
         System.out.println("4. Update Ticket");
         System.out.println("5. Delete Ticket");
-        System.out.println("6. Count Tickets by Player ID"); // Del Manager
-        System.out.println("7. Count Tickets by Escape Room ID"); // Del Manager
+        System.out.println("6. Count Tickets by Player ID");
+        System.out.println("7. Count Tickets by Escape Room ID");
+        System.out.println("8. List Tickets by Escape Room ID");
+        System.out.println("9. Calculate Total Revenue for an Escape Room");
         System.out.println("0. Back to Main Menu");
         System.out.print("Select an option: ");
     }
@@ -57,6 +59,8 @@ public class TicketMenu {
             case 5 -> deleteTicket();
             case 6 -> countTicketsByPlayerId();
             case 7 -> countTicketsByEscapeRoomId();
+            case 8 -> listTicketsByEscapeRoomId();
+            case 9 -> calculateRevenueForEscapeRoom();
             case 0 -> System.out.println("Returning to main menu.");
             default -> System.out.println("Invalid option.");
         }
@@ -139,5 +143,24 @@ public class TicketMenu {
         int escapeRoomId = inputHelper.readInt("Enter Escape Room ID: ");
         int count = ticketManager.countTicketsByEscapeRoomId(escapeRoomId);
         System.out.println("📊 Escape Room " + escapeRoomId + " has " + count + " tickets.");
+    }
+
+    private void listTicketsByEscapeRoomId() { // <-- NEW METHOD
+        System.out.println("\n--- List Tickets by Escape Room ID ---");
+        int escapeRoomId = inputHelper.readInt("Enter Escape Room ID: ");
+        List<Ticket> tickets = ticketManager.getTicketsByEscapeRoomId(escapeRoomId);
+        if (tickets.isEmpty()) {
+            System.out.println("📭 No tickets found for Escape Room ID: " + escapeRoomId);
+        } else {
+            System.out.println("--- Tickets for Escape Room ID: " + escapeRoomId + " ---");
+            tickets.forEach(System.out::println);
+        }
+    }
+
+    private void calculateRevenueForEscapeRoom() { // <-- NEW METHOD
+        System.out.println("\n--- Calculate Total Revenue for an Escape Room ---");
+        int escapeRoomId = inputHelper.readInt("Enter Escape Room ID: ");
+        double totalRevenue = ticketManager.getTotalRevenueByEscapeRoomId(escapeRoomId);
+        System.out.printf("💰 Total revenue for Escape Room ID %d: %.2f€\n", escapeRoomId, totalRevenue);
     }
 }

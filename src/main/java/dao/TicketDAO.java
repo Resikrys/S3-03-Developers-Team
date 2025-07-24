@@ -9,16 +9,13 @@ import java.util.Optional;
 
 public interface TicketDAO {
     void createTicket(Ticket ticket) throws SQLException;
-
     Optional<Ticket> getTicketById(int id) throws SQLException;
-
     List<Ticket> getAllTickets() throws SQLException;
-
     void updateTicket(Ticket ticket) throws SQLException;
-
     void deleteTicket(int id) throws SQLException;
-
     int countTicketsByPlayerId(int playerId) throws SQLException;
-
     int countTicketsByEscapeRoomId(int escapeRoomId) throws SQLException;
+
+    List<Ticket> getTicketsByEscapeRoomId(int escapeRoomId) throws SQLException;
+    double getTotalRevenueByEscapeRoomId(int escapeRoomId) throws SQLException;
 }
