@@ -5,8 +5,10 @@ import dao.ClueDao;
 import enums.Material;
 import exception.NotFoundException;
 import model.ClueObject;
-import dbconnection.SQLExecutor;
 import util.InputHelper;
+import observer.NotificationService; // <-- NEW IMPORT
+import observer.NotificationEvent;   // <-- NEW IMPORT
+import observer.EventType;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -23,8 +25,6 @@ public class ClueManager {
         this.inputHelper = inputHelper;
     }
 
-    // Moved showMenu to ClueMenu as per your new structure
-
     public void createClue() throws SQLException {
         String name = inputHelper.readString("Enter clue name: ");
         BigDecimal price = inputHelper.readBigDecimal("Enter clue price: ");
@@ -36,6 +36,9 @@ public class ClueManager {
         ClueObject clue = new ClueObject(name, price, material, puzzle, solved, roomId);
         clueDAO.createClue(clue);
         // Confirmation message is now handled in DAO
+        NotificationService.getInstance().notifyObservers(
+                new NotificationEvent(EventType.CLUE_CREATED, "ClueObject", clue.getId(), clue.getName())
+        );
     }
 
     public void listAllClues() throws SQLException {
@@ -54,6 +57,7 @@ public class ClueManager {
 
         if (existingClue.isPresent()) {
             ClueObject clueToUpdate = existingClue.get();
+            String oldName = clueToUpdate.getName(); // Get old name for notification
             System.out.println("Current details for Clue ID " + id + ": " + clueToUpdate);
 
             String newName = inputHelper.readString("New name (current: " + clueToUpdate.getName() + "): ");
@@ -72,6 +76,10 @@ public class ClueManager {
 
             clueDAO.updateClue(clueToUpdate); // This can throw ClueNotFoundException
             // Confirmation message handled in DAO
+            String updatedDescription = oldName + " -> " + newName;
+            NotificationService.getInstance().notifyObservers(
+                    new NotificationEvent(EventType.CLUE_UPDATED, "ClueObject", clueToUpdate.getId(), updatedDescription)
+            );
         } else {
             System.out.println("⚠️ Clue with ID " + id + " not found for update.");
         }
@@ -79,8 +87,14 @@ public class ClueManager {
 
     public void deleteClue() throws SQLException, NotFoundException { // Declares ClueNotFoundException
         int id = inputHelper.readInt("Enter ID of clue to delete: ");
+        Optional<ClueObject> clueToDeleteOptional = clueDAO.getClueById(id);
         clueDAO.deleteClue(id); // This can throw ClueNotFoundException
         // Confirmation message handled in DAO
+        clueToDeleteOptional.ifPresent(clue ->
+                NotificationService.getInstance().notifyObservers(
+                        new NotificationEvent(EventType.CLUE_DELETED, "ClueObject", clue.getId(), clue.getName())
+                )
+        );
     }
 
     public void searchClueById() throws SQLException { // No ClueNotFoundException here, as Optional handles absence
