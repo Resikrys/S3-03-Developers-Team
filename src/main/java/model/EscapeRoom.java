@@ -41,4 +41,13 @@ public class EscapeRoom {
     public void setTotalTickets(int totalTickets) {
         this.totalTickets = totalTickets;
     }
+
+    @Override
+    public String toString() {
+        return "---------------------EscapeRoom---------------------- \n{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", totalTickets=" + totalTickets +
+                '}';
+    }
 }
