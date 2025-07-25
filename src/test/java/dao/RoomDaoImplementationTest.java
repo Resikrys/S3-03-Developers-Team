@@ -28,17 +28,34 @@ class RoomDaoImplementationTest {
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("DELETE FROM DecorationObject");
-            stmt.executeUpdate("DELETE FROM ClueObject");
-            stmt.executeUpdate("DELETE FROM Player");
+            // --- Corrected Cleanup Order ---
+            // 1. Delete from 'grandchild' tables first (Ticket, ClueObject, DecorationObject)
             stmt.executeUpdate("DELETE FROM Ticket");
-            stmt.executeUpdate("DELETE FROM Room");
-            stmt.executeUpdate("ALTER TABLE Room AUTO_INCREMENT = 1");
+            stmt.executeUpdate("DELETE FROM ClueObject");
+            stmt.executeUpdate("DELETE FROM DecorationObject");
 
+            // 2. Then delete from 'child' tables (Player, Room)
+            stmt.executeUpdate("DELETE FROM Player");
+            stmt.executeUpdate("DELETE FROM Room");
+
+            // 3. Finally, delete from 'parent' table (EscapeRoom)
             stmt.executeUpdate("DELETE FROM EscapeRoom");
+
+            // --- Reset AUTO_INCREMENT for all tables that use it ---
+            // It's good practice to reset all related AUTO_INCREMENTs for clean test state
+            stmt.executeUpdate("ALTER TABLE Ticket AUTO_INCREMENT = 1");
+            stmt.executeUpdate("ALTER TABLE ClueObject AUTO_INCREMENT = 1");
+            stmt.executeUpdate("ALTER TABLE DecorationObject AUTO_INCREMENT = 1");
+            stmt.executeUpdate("ALTER TABLE Player AUTO_INCREMENT = 1");
+            stmt.executeUpdate("ALTER TABLE Room AUTO_INCREMENT = 1");
             stmt.executeUpdate("ALTER TABLE EscapeRoom AUTO_INCREMENT = 1");
+
+            // --- Re-insert necessary data for tests ---
+            // You only need EscapeRoom data for Room tests since Room has a FK to EscapeRoom
+            // Other tables (Player, Ticket, ClueObject, DecorationObject) can be re-inserted
+            // by specific tests if they are needed, or only when you test their respective DAOs.
             stmt.executeUpdate("INSERT INTO EscapeRoom (name, total_tickets) VALUES ('Test EscapeRoom 1', 10), ('Test EscapeRoom 2', 20)");
-            System.out.println("Limpieza y setup inicial de tablas para el test de RoomDao.");
+            System.out.println("Cleaning and initial setup of tables for the RoomDao test.");
         }
     }
 

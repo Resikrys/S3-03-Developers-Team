@@ -87,10 +87,21 @@ public class InputHelper {
         }
     }
 
+    public double readDouble(String prompt) { // Eliminar 'static'
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine(); // Usar la instancia de scanner
+            try {
+                return Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid decimal number.");
+            }
+        }
+    }
+
     public void closeScanner() {
         if (scanner != null) {
             scanner.close();
         }
     }
-
 }

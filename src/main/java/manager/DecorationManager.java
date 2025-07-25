@@ -6,6 +6,9 @@ import enums.Material;
 import exception.DecorationNotFoundException;
 import model.DecorationObject;
 import util.InputHelper;
+import observer.NotificationService; // <-- NEW IMPORT
+import observer.NotificationEvent;   // <-- NEW IMPORT
+import observer.EventType;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -33,6 +36,9 @@ public class DecorationManager {
         DecorationObject decoration = new DecorationObject(name, price, material, roomId);
         decorationDao.createDecoration(decoration);
         // Confirmation message is now handled in DAO
+        NotificationService.getInstance().notifyObservers(
+                new NotificationEvent(EventType.DECORATION_CREATED, "DecorationObject", decoration.getId(), decoration.getName())
+        );
     }
 
     public void getDecorationById() throws SQLException { // Made public
@@ -62,6 +68,7 @@ public class DecorationManager {
 
         if (optionalDecoration.isPresent()) {
             DecorationObject decorationToUpdate = optionalDecoration.get();
+            String oldName = decorationToUpdate.getName(); // Get old name for notification
             System.out.println("Current details for Decoration ID " + id + ": " + decorationToUpdate);
 
             String newName = inputHelper.readString("New name (current: " + decorationToUpdate.getName() + "): ");
@@ -77,6 +84,10 @@ public class DecorationManager {
 
             decorationDao.updateDecoration(decorationToUpdate);
             // Confirmation message handled in DAO
+            String updatedDescription = oldName + " -> " + newName;
+            NotificationService.getInstance().notifyObservers(
+                    new NotificationEvent(EventType.DECORATION_UPDATED, "DecorationObject", decorationToUpdate.getId(), updatedDescription)
+            );
         } else {
             // No need to throw here, just inform the user
             System.out.println("⚠️ Decoration with ID " + id + " not found for update.");
@@ -85,8 +96,14 @@ public class DecorationManager {
 
     public void deleteDecoration() throws SQLException, DecorationNotFoundException { // Made public
         int id = inputHelper.readInt("ID of the decoration to delete: ");
+        Optional<DecorationObject> decorationToDeleteOptional = decorationDao.getDecorationById(id);
         decorationDao.deleteDecoration(id);
         // Confirmation message handled in DAO
+        decorationToDeleteOptional.ifPresent(decoration ->
+                NotificationService.getInstance().notifyObservers(
+                        new NotificationEvent(EventType.DECORATION_DELETED, "DecorationObject", decoration.getId(), decoration.getName())
+                )
+        );
     }
 
     public void getByRoomId() throws SQLException { // Made public

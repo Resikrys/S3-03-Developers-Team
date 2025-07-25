@@ -88,4 +88,24 @@ public class TicketManager {
             return 0;
         }
     }
+
+    public List<Ticket> getTicketsByEscapeRoomId(int escapeRoomId) {
+        try {
+            return ticketDAO.getTicketsByEscapeRoomId(escapeRoomId);
+        } catch (SQLException e) {
+            System.err.println("❌ Error retrieving tickets by escape room ID " + escapeRoomId + ": " + e.getMessage());
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public double getTotalRevenueByEscapeRoomId(int escapeRoomId) { // <-- NUEVO MÉTODO PARA INGRESOS
+        try {
+            return ticketDAO.getTotalRevenueByEscapeRoomId(escapeRoomId);
+        } catch (SQLException e) {
+            System.err.println("❌ Error calculating total revenue for escape room ID " + escapeRoomId + ": " + e.getMessage());
+            e.printStackTrace();
+            return 0.0; // Devuelve 0.0 en caso de error
+        }
+    }
 }
