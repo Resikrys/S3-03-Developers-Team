@@ -83,7 +83,7 @@ INSERT INTO Player (name, email, registered, escape_room_id) VALUES
 ('David Pérez', 'david.perez@example.com', TRUE, 1),
 ('Lucía Torres', 'lucia.torres@example.com', FALSE, 1),
 ('Andrés Molina', 'andres.molina@example.com', TRUE, 1),
-('Eva Ríos', 'eva.rios@example.com', TRUE, 1),
+('Eva Ríos', 'eva.rios@example.com', TRUE, 1);
 
 CREATE TABLE Ticket (
     id INT PRIMARY KEY AUTO_INCREMENT,
