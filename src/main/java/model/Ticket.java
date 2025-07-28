@@ -22,8 +22,6 @@ public class Ticket {
 
     public Ticket() {}
 
-    // Getters y Setters
-
     public int getPlayerId() {
         return playerId;
     }

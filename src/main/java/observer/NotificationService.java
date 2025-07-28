@@ -17,7 +17,7 @@ public class NotificationService implements Subject {
 
     @Override
     public void attach(Observer observer) {
-        if (!observers.contains(observer)) { // Prevent duplicates
+        if (!observers.contains(observer)) {
             observers.add(observer);
             System.out.println("✅ Observer attached: " + observer.getPlayer().getName());
         } else {
@@ -35,14 +35,14 @@ public class NotificationService implements Subject {
     }
 
     @Override
-    public void notifyObservers(NotificationEvent event) { // <--- CHANGE HERE
+    public void notifyObservers(NotificationEvent event) {
         System.out.println("\n--- NOTIFYING SUBSCRIBED PLAYERS ---");
         if (observers.isEmpty()) {
             System.out.println("No players subscribed to notifications.");
         }
         List<Observer> snapshot = new ArrayList<>(observers);
         for (Observer obs : snapshot) {
-            obs.update(event); // Pass the NotificationEvent object
+            obs.update(event);
         }
     }
 

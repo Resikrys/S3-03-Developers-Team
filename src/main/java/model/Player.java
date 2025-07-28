@@ -13,7 +13,6 @@ public class Player {
     private String email;
     private boolean registered;
     private int escapeRoomId;
-    //private Integer escapeRoomId;
     private final List<String> notifications = new ArrayList<>();
 
     public Player() {}
@@ -45,11 +44,11 @@ public class Player {
     public int getEscapeRoomId() { return escapeRoomId; }
     public void setEscapeRoomId(int escapeRoomId) { this.escapeRoomId = escapeRoomId; }
 
-    public void addNotification(String notification) { // <-- NEW METHOD
+    public void addNotification(String notification) {
         this.notifications.add(notification);
     }
 
-    public List<String> getNotifications() { // <-- NEW METHOD (for displaying)
+    public List<String> getNotifications() {
         return new ArrayList<>(notifications);
     }
 

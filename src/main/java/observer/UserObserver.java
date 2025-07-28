@@ -1,4 +1,3 @@
-// observer/UserObserver.java
 package observer;
 
 import model.Player; // Keep import
@@ -19,7 +18,7 @@ public class UserObserver implements Observer {
     }
 
     @Override
-    public void update(NotificationEvent event) { // <--- CHANGE HERE
+    public void update(NotificationEvent event) {
         String notificationMessage = "";
         switch (event.getType()) {
             case ROOM_CREATED:
@@ -53,17 +52,17 @@ public class UserObserver implements Observer {
                 notificationMessage = "An unknown update occurred for " + event.getEntityName() + " (ID: " + event.getEntityId() + "): " + event.getDescription();
                 break;
         }
-        player.addNotification(notificationMessage); // Store the formatted message
+        player.addNotification(notificationMessage);
         System.out.printf(">>> Notification for %s (%s): %s%n",
-                player.getName(), player.getEmail(), notificationMessage); // Assuming player.getMail() is player.getEmail()
+                player.getName(), player.getEmail(), notificationMessage);
     }
 
     @Override
-    public boolean equals(Object o) { // Crucial for correct `attach` and `detach`
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserObserver that = (UserObserver) o;
-        return player.getId() == that.player.getId(); // Compare by Player ID
+        return player.getId() == that.player.getId();
     }
 
     @Override

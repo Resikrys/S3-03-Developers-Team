@@ -15,7 +15,7 @@ public class EnvLoader {
             System.err.println("Error: The .env file could not be loaded. Make sure it exists in the project root or in the specified path. "
                     + e.getMessage());
             throw new RuntimeException("Failed to load environment variables from .env", e);
-        } catch (Exception e) { // Capturar cualquier otra excepción inesperada
+        } catch (Exception e) {
             System.err.println("Unexpected error loading .env file: " + e.getMessage());
             throw new RuntimeException("Unexpected failure loading environment variables from .env", e);
         }

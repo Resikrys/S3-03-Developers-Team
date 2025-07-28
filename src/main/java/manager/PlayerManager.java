@@ -15,7 +15,7 @@ public class PlayerManager {
 
     private final PlayerDao playerDao;
     private final InputHelper scanner;
-    private final Map<Integer, UserObserver> activeObservers = new HashMap<>(); // To keep track of UserObservers by Player ID
+    private final Map<Integer, UserObserver> activeObservers = new HashMap<>();
 
     public PlayerManager(PlayerDao playerDao, InputHelper inputHelper) {
         this.playerDao = playerDao;
@@ -38,7 +38,6 @@ public class PlayerManager {
         if (players.isEmpty()) {
             System.out.println("📭 No players found.");
         } else {
-//            players.forEach(System.out::println);
             System.out.println("--- All Players ---");
             players.forEach(p -> {
                 System.out.print(p);
@@ -80,29 +79,23 @@ public class PlayerManager {
         String email = scanner.readString("New email (" + existing.getEmail() + "): ");
         boolean registered = scanner.readBoolean("New registered status (" + existing.isRegistered() + "): ");
         int escapeRoomId = scanner.readInt("New escape room ID (" + existing.getEscapeRoomId() + "): ");
-//        Integer escapeRoomId = inputHelper.readOptionalInt("New escape room ID (" +
-//                (existing.getEscapeRoomId() != null ? existing.getEscapeRoomId() : "NULL") + ", leave blank if not applicable): ");
 
         existing.setName(name);
         existing.setEmail(email);
         existing.setRegistered(registered);
         existing.setEscapeRoomId(escapeRoomId);
-//        Player updated = new Player(id, name, email, registered, escapeRoomId);
         playerDao.updatePlayer(existing);
         System.out.println("🔄 Player updated.");
     }
 
     public void deletePlayer() throws SQLException {
         int id = scanner.readInt("Enter ID of the player to delete: ");
-//        playerDao.deletePlayer(id);
-//        System.out.println("🗑️ Player deleted.");
         Player playerToDelete = playerDao.getPlayerById(id);
         if (playerToDelete != null) {
-            // Detach UserObserver before deleting the player from DB
             if (activeObservers.containsKey(playerToDelete.getId())) {
                 UserObserver obs = activeObservers.get(playerToDelete.getId());
-                NotificationService.getInstance().detach(obs); // Detach from service
-                activeObservers.remove(playerToDelete.getId()); // Remove from map
+                NotificationService.getInstance().detach(obs);
+                activeObservers.remove(playerToDelete.getId());
             }
             playerDao.deletePlayer(id);
             System.out.println("🗑️ Player deleted.");
@@ -111,7 +104,6 @@ public class PlayerManager {
         }
     }
 
-    // --- NEW METHODS FOR SUBSCRIPTION ---
     public void subscribePlayerToNotifications() throws SQLException {
         int id = scanner.readInt("Enter Player ID to subscribe to notifications: ");
         Player player = playerDao.getPlayerById(id);
@@ -119,7 +111,7 @@ public class PlayerManager {
             if (!activeObservers.containsKey(player.getId())) {
                 UserObserver observer = new UserObserver(player);
                 NotificationService.getInstance().attach(observer);
-                activeObservers.put(player.getId(), observer); // Store the observer
+                activeObservers.put(player.getId(), observer);
                 System.out.println("✅ Player " + player.getName() + " subscribed to notifications.");
             } else {
                 System.out.println("⚠️ Player " + player.getName() + " is already subscribed.");
@@ -131,7 +123,7 @@ public class PlayerManager {
 
     public void unsubscribePlayerFromNotifications() throws SQLException {
         int id = scanner.readInt("Enter Player ID to unsubscribe from notifications: ");
-        Player player = playerDao.getPlayerById(id); // Fetch player for name/info
+        Player player = playerDao.getPlayerById(id);
         if (player != null) {
             if (activeObservers.containsKey(player.getId())) {
                 UserObserver observer = activeObservers.get(player.getId());

@@ -1,10 +1,10 @@
 package menu;
 
-import manager.TicketManager; // Importa tu TicketManager
-import model.Ticket; // Importa tu modelo Ticket
-import util.InputHelper; // Tu clase de utilidad para la entrada de usuario
+import manager.TicketManager;
+import model.Ticket;
+import util.InputHelper;
 
-import java.sql.SQLException; // Para manejar excepciones de SQL
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public class TicketMenu {
 
     public TicketMenu(InputHelper inputHelper) {
         this.inputHelper = inputHelper;
-        this.ticketManager = new TicketManager(); // Instancia tu TicketManager
+        this.ticketManager = new TicketManager();
     }
 
     public void showMenu() {
@@ -25,7 +25,7 @@ public class TicketMenu {
 
             try {
                 handleOption(option);
-            } catch (SQLException e) { // Captura SQLException desde el manager
+            } catch (SQLException e) {
                 System.err.println("❌ An SQL error occurred during the Ticket operation: " + e.getMessage());
                 // e.printStackTrace(); // Descomentar para depuración
             } catch (Exception e) { // Captura otras excepciones
@@ -50,7 +50,7 @@ public class TicketMenu {
         System.out.print("Select an option: ");
     }
 
-    private void handleOption(int option) throws SQLException { // Lanza SQLException para que el showMenu la capture
+    private void handleOption(int option) throws SQLException {
         switch (option) {
             case 1 -> createTicket();
             case 2 -> getTicketById();
@@ -72,11 +72,9 @@ public class TicketMenu {
         int playerId = inputHelper.readInt("Enter player ID: ");
         int escapeRoomId = inputHelper.readInt("Enter escape room ID: ");
 
-        // Crea una instancia de Ticket. El ID se generará automáticamente en la DB
-        // NO incluyas 'id' en el constructor si la DB lo auto-incrementa.
         Ticket newTicket = new Ticket(price, playerId, escapeRoomId);
         ticketManager.createTicket(newTicket);
-        System.out.println("✅ Ticket creation process initiated."); // El Manager o DAO debería confirmar éxito/error
+        System.out.println("✅ Ticket creation process initiated.");
     }
 
     private void getTicketById() {
@@ -145,7 +143,7 @@ public class TicketMenu {
         System.out.println("📊 Escape Room " + escapeRoomId + " has " + count + " tickets.");
     }
 
-    private void listTicketsByEscapeRoomId() { // <-- NEW METHOD
+    private void listTicketsByEscapeRoomId() {
         System.out.println("\n--- List Tickets by Escape Room ID ---");
         int escapeRoomId = inputHelper.readInt("Enter Escape Room ID: ");
         List<Ticket> tickets = ticketManager.getTicketsByEscapeRoomId(escapeRoomId);
@@ -157,7 +155,7 @@ public class TicketMenu {
         }
     }
 
-    private void calculateRevenueForEscapeRoom() { // <-- NEW METHOD
+    private void calculateRevenueForEscapeRoom() {
         System.out.println("\n--- Calculate Total Revenue for an Escape Room ---");
         int escapeRoomId = inputHelper.readInt("Enter Escape Room ID: ");
         double totalRevenue = ticketManager.getTotalRevenueByEscapeRoomId(escapeRoomId);

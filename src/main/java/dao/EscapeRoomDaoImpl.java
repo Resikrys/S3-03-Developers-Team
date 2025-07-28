@@ -28,8 +28,8 @@ public class EscapeRoomDaoImpl implements EscapeRoomDAO {
             );
         } catch (SQLException e) {
             System.err.println("Error creating EscapeRoom with name '" + escapeRoom.getName() + "': " + e.getMessage());
-            e.printStackTrace(); // Para depuración
-            throw e; // Relanzar la excepción
+            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -51,20 +51,19 @@ public class EscapeRoomDaoImpl implements EscapeRoomDAO {
                             }
                         } catch (SQLException e) {
                             System.err.println("Error processing ResultSet for all EscapeRooms: " + e.getMessage());
-                            e.printStackTrace(); // Para depuración
+                            e.printStackTrace();
                         }
-                        return null; // El valor de retorno del procesador no se usa para List<EscapeRoom>
+                        return null;
                     }
             );
         } catch (SQLException e) {
             System.err.println("Error obtaining all EscapeRooms: " + e.getMessage());
-            e.printStackTrace(); // Para depuración
-            throw e; // Relanzar la excepción
+            e.printStackTrace();
+            throw e;
         }
         return escapeRooms;
     }
 
-    // Añadimos un método getById para EscapeRoom, ya que es fundamental para update/delete y tests
     public Optional<EscapeRoom> getEscapeRoomById(int id) throws SQLException {
         String sql = "SELECT id, name, total_tickets FROM EscapeRoom WHERE id = ?";
         try {
@@ -105,17 +104,14 @@ public class EscapeRoomDaoImpl implements EscapeRoomDAO {
                     escapeRoom.getId()
             );
             if (rowsAffected == 0) {
-                // Si no se afectó ninguna fila, es porque la EscapeRoom no existe
                 throw new EscapeRoomNotFoundException("EscapeRoom with ID " + escapeRoom.getId() + " not found for update.");
             }
         } catch (EscapeRoomNotFoundException e) {
-            // Atrapa y relanza la excepción específica
             throw e;
         } catch (SQLException e) {
-            // Atrapa cualquier otra SQLException (problemas técnicos de DB)
             System.err.println("Error updating EscapeRoom with ID " + escapeRoom.getId() + ": " + e.getMessage());
-            e.printStackTrace(); // Para depuración
-            throw e; // Relanzar la SQLException
+            e.printStackTrace();
+            throw e;
         }
     }
     @Override
@@ -124,17 +120,14 @@ public class EscapeRoomDaoImpl implements EscapeRoomDAO {
         try {
             int rowsAffected = sqlExecutor.executeUpdate(sql, id);
             if (rowsAffected == 0) {
-                // Si no se afectó ninguna fila, es porque la EscapeRoom no existe
                 throw new EscapeRoomNotFoundException("EscapeRoom with ID " + id + " not found for deletion.");
             }
         } catch (EscapeRoomNotFoundException e) {
-            // Atrapa y relanza la excepción específica
             throw e;
         } catch (SQLException e) {
-            // Atrapa cualquier otra SQLException
             System.err.println("Error deleting EscapeRoom with ID " + id + ": " + e.getMessage());
-            e.printStackTrace(); // Para depuración
-            throw e; // Relanzar la SQLException
+            e.printStackTrace();
+            throw e;
         }
     }
 }

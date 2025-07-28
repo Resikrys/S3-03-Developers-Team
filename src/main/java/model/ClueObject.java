@@ -11,10 +11,8 @@ public class ClueObject {
     private Material material;
     private String puzzleDescription;
     private boolean solved;
-   // private Integer rewardId;     // Puedes cambiar a tipo `Reward` si más adelante se modela
     private int roomId;
 
-    // Constructor con id (para cuando se recupera de la base de datos)
     public ClueObject(int id, String name, BigDecimal price, Material material, String puzzleDescription, boolean solved, int roomId) {
         this.id = id;
         this.name = name;
@@ -22,18 +20,15 @@ public class ClueObject {
         this.material = material;
         this.puzzleDescription = puzzleDescription;
         this.solved = solved;
-       // this.rewardId = rewardId;
         this.roomId = roomId;
     }
 
-    // Constructor sin ID (para cuando se crea una nueva pista)
     public ClueObject(String name, BigDecimal price, Material material, String puzzleDescription, boolean solved, int roomId) {
         this.name = name;
         this.price = price;
         this.material = material;
         this.puzzleDescription = puzzleDescription;
         this.solved = solved;
-        //this.rewardId = rewardId;
         this.roomId = roomId;
     }
 
@@ -60,10 +55,6 @@ public class ClueObject {
     public boolean isSolved() {
         return solved;
     }
-
-    /*public Integer getRewardId() {
-        return rewardId;
-    }*/
 
     public int getRoomId() {
         return roomId;
@@ -92,10 +83,6 @@ public class ClueObject {
     public void setSolved(boolean solved) {
         this.solved = solved;
     }
-
-    /*public void setRewardId(Integer rewardId) {
-        this.rewardId = rewardId;
-    }*/
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;

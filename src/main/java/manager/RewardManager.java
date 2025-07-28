@@ -98,7 +98,6 @@ public class RewardManager {
                     String newSpecialMessage = inputHelper.readString("Enter new special message (leave empty to clear): ");
                     existingReward.setSpecialRewardDetails(newSpecialMessage.isEmpty() ? null : newSpecialMessage);
                 } else {
-                    // If user chooses NOT to update special message, keep its current value
                 }
 
 

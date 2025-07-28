@@ -29,10 +29,10 @@ CREATE TABLE Room (
 );
 
 INSERT INTO Room (theme, difficulty_level, escape_room_id) VALUES
-('Classic Horror', 8, 1), -- From The Haunted Mansion
-('Gothic Mistery', 7, 1), -- Of The Haunted Mansion
-('Post-Apocalyptic Survival', 9, 2), -- From the Secret Bunker
-('Retro SciFi', 6, 3), -- From the Abandoned Laboratory
+('Classic Horror', 8, 1),
+('Gothic Mistery', 7, 1),
+('Post-Apocalyptic Survival', 9, 2),
+('Retro SciFi', 6, 3),
 ('NULL Test Room', 5, NULL);
 
 CREATE TABLE DecorationObject (
@@ -83,7 +83,7 @@ INSERT INTO Player (name, email, registered, escape_room_id) VALUES
 ('David Pérez', 'david.perez@example.com', TRUE, 1),
 ('Lucía Torres', 'lucia.torres@example.com', FALSE, 1),
 ('Andrés Molina', 'andres.molina@example.com', TRUE, 1),
-('Eva Ríos', 'eva.rios@example.com', TRUE, 1),
+('Eva Ríos', 'eva.rios@example.com', TRUE, 1);
 
 CREATE TABLE Ticket (
     id INT PRIMARY KEY AUTO_INCREMENT,

@@ -9,10 +9,10 @@ import java.sql.SQLException;
 
 public class DecorationMenu {
     private final DecorationManager decorationManager;
-    private final InputHelper inputHelper; // Renamed for consistency
+    private final InputHelper inputHelper;
 
     public DecorationMenu(InputHelper inputHelper) {
-        this.inputHelper = inputHelper; // Initialize inputHelper
+        this.inputHelper = inputHelper;
         this.decorationManager = new DecorationManager(inputHelper);
     }
 
@@ -20,11 +20,11 @@ public class DecorationMenu {
         int option;
         do {
             printMenu();
-            option = inputHelper.readInt("Choose an option: "); // Use inputHelper
+            option = inputHelper.readInt("Choose an option: ");
 
             try {
                 handleOption(option);
-            } catch (InvalidInputException e) { // Catch InputHelper exceptions
+            } catch (InvalidInputException e) {
                 System.err.println("❌ Input error: " + e.getMessage() + ". Please try again.");
             } catch (DecorationNotFoundException e) {
                 System.err.println("❌ Operation error: " + e.getMessage());
@@ -48,10 +48,9 @@ public class DecorationMenu {
         System.out.println("5. Delete Decoration");
         System.out.println("6. Show Decorations by Room ID");
         System.out.println("0. Back to Main Menu");
-        System.out.print("Select an option: "); // Added prompt to the menu itself for clarity
+        System.out.print("Select an option: ");
     }
 
-    // Now declares the specific exceptions that manager methods can throw
     private void handleOption(int option) throws SQLException, DecorationNotFoundException {
         switch (option) {
             case 1 -> decorationManager.createDecoration();

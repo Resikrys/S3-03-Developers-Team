@@ -99,13 +99,13 @@ public class TicketManager {
         }
     }
 
-    public double getTotalRevenueByEscapeRoomId(int escapeRoomId) { // <-- NUEVO MÉTODO PARA INGRESOS
+    public double getTotalRevenueByEscapeRoomId(int escapeRoomId) {
         try {
             return ticketDAO.getTotalRevenueByEscapeRoomId(escapeRoomId);
         } catch (SQLException e) {
             System.err.println("❌ Error calculating total revenue for escape room ID " + escapeRoomId + ": " + e.getMessage());
             e.printStackTrace();
-            return 0.0; // Devuelve 0.0 en caso de error
+            return 0.0; 
         }
     }
 }

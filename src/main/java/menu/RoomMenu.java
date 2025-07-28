@@ -13,7 +13,7 @@ public class RoomMenu {
 
     public RoomMenu(InputHelper inputHelper) {
         this.inputHelper = inputHelper;
-        this.roomManager = new RoomManager(inputHelper); // RoomManager still needs InputHelper
+        this.roomManager = new RoomManager(inputHelper);
     }
 
     public void showMenu() {
@@ -26,24 +26,24 @@ public class RoomMenu {
             System.out.println("4. Update Room");
             System.out.println("5. Delete Room");
             System.out.println("0. Back to Main Menu");
-            roomChoice = inputHelper.readInt("Select a valid option for Rooms Menu: "); // Use InputHelper
+            roomChoice = inputHelper.readInt("Select a valid option for Rooms Menu: ");
 
             try {
                 switch (roomChoice) {
                     case 1:
-                        roomManager.createRoom(); // Delegate to RoomManager
+                        roomManager.createRoom();
                         break;
                     case 2:
-                        roomManager.searchRoomById(); // Delegate to RoomManager
+                        roomManager.searchRoomById();
                         break;
                     case 3:
-                        roomManager.listAllRooms(); // Delegate to RoomManager
+                        roomManager.listAllRooms();
                         break;
                     case 4:
-                        roomManager.updateRoom(); // Delegate to RoomManager
+                        roomManager.updateRoom();
                         break;
                     case 5:
-                        roomManager.deleteRoom(); // Delegate to RoomManager
+                        roomManager.deleteRoom();
                         break;
                     case 0:
                         System.out.println("Back to Main menu.");

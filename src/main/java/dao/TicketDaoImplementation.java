@@ -120,7 +120,7 @@ public class TicketDaoImplementation implements TicketDAO {
                     } catch (SQLException e) {
                         System.err.println("❌ Error counting tickets by player ID: " + e.getMessage());
                         e.printStackTrace();
-                        throw new RuntimeException(e);  // O maneja como prefieras
+                        throw new RuntimeException(e);
                     }
                 },
                 playerId
@@ -138,7 +138,7 @@ public class TicketDaoImplementation implements TicketDAO {
                     } catch (SQLException e) {
                         System.err.println("❌ Error counting tickets by escape room ID: " + e.getMessage());
                         e.printStackTrace();
-                        throw new RuntimeException(e);  // O maneja como prefieras
+                        throw new RuntimeException(e);
                     }
                 },
                 escapeRoomId
@@ -174,18 +174,15 @@ public class TicketDaoImplementation implements TicketDAO {
     }
 
     @Override
-    public double getTotalRevenueByEscapeRoomId(int escapeRoomId) throws SQLException { // <-- NUEVA IMPLEMENTACIÓN
+    public double getTotalRevenueByEscapeRoomId(int escapeRoomId) throws SQLException {
         String sql = "SELECT SUM(price) AS total_revenue FROM Ticket WHERE escape_room_id = ?";
         return sqlExecutor.executeQuery(
                 sql,
                 rs -> {
                     try {
-                        // Si no hay resultados (o ningún ticket), SUM() devuelve NULL.
-                        // rs.next() para mover el cursor al primer (y único) resultado.
                         if (rs.next()) {
-                            // Usar getDouble y comprobar si es SQL NULL
                             double total = rs.getDouble("total_revenue");
-                            if (rs.wasNull()) { // Si el resultado es NULL (no hay tickets), devuelve 0.0
+                            if (rs.wasNull()) {
                                 return 0.0;
                             }
                             return total;
@@ -193,9 +190,9 @@ public class TicketDaoImplementation implements TicketDAO {
                     } catch (SQLException e) {
                         System.err.println("❌ Error calculating total revenue by escape room ID: " + e.getMessage());
                         e.printStackTrace();
-                        throw new RuntimeException(e); // Propaga la excepción o manéjala según tu política
+                        throw new RuntimeException(e);
                     }
-                    return 0.0; // En caso de que no haya ni siquiera un row (poco probable con SUM)
+                    return 0.0;
                 },
                 escapeRoomId
         );

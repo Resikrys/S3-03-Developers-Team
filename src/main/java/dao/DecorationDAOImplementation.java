@@ -15,7 +15,7 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
     private final SQLExecutor sqlExecutor;
 
     public DecorationDAOImplementation() {
-        this.sqlExecutor = new SQLExecutor(); // Assumes SQLExecutor is instantiated directly
+        this.sqlExecutor = new SQLExecutor();
     }
 
     @Override
@@ -32,8 +32,8 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
             System.out.println("✅ Decoration '" + decoration.getName() + "' created successfully.");
         } catch (SQLException e) {
             System.err.println("❌ Error al crear decoración '" + decoration.getName() + "': " + e.getMessage());
-            e.printStackTrace(); // For debugging
-            throw e; // Re-throw the exception
+            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -52,17 +52,17 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
                                 rs.getInt("room_id")
                         ));
                     }
-                    return Optional.empty(); // If not found, return empty Optional
+                    return Optional.empty();
                 } catch (SQLException e) {
                     System.err.println("❌ Error al leer decoración por ID " + id + " del ResultSet: " + e.getMessage());
                     e.printStackTrace();
-                    throw new RuntimeException("Error processing ResultSet for DecorationObject ID " + id, e); // Wrap and re-throw
+                    throw new RuntimeException("Error processing ResultSet for DecorationObject ID " + id, e);
                 }
             }, id);
         } catch (SQLException e) {
             System.err.println("❌ Error al ejecutar consulta para decoración ID " + id + ": " + e.getMessage());
             e.printStackTrace();
-            throw e; // Re-throw the SQLException from executeQuery
+            throw e;
         }
     }
 
@@ -85,14 +85,14 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
                 } catch (SQLException e) {
                     System.err.println("❌ Error al leer todas las decoraciones del ResultSet: " + e.getMessage());
                     e.printStackTrace();
-                    throw new RuntimeException("Error processing ResultSet for all DecorationObjects", e); // Wrap and re-throw
+                    throw new RuntimeException("Error processing ResultSet for all DecorationObjects", e);
                 }
                 return decorations;
             });
         } catch (SQLException e) {
             System.err.println("❌ Error al obtener todas las decoraciones: " + e.getMessage());
             e.printStackTrace();
-            throw e; // Re-throw the SQLException from executeQuery
+            throw e;
         }
     }
 
@@ -114,11 +114,11 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
             }
             System.out.println("✅ Decoration with ID " + decoration.getId() + " updated successfully.");
         } catch (DecorationNotFoundException e) {
-            throw e; // Re-throw specific exception
+            throw e;
         } catch (SQLException e) {
             System.err.println("❌ Error al actualizar decoración con ID " + decoration.getId() + ": " + e.getMessage());
             e.printStackTrace();
-            throw e; // Re-throw other SQLExceptions
+            throw e;
         }
     }
 
@@ -133,11 +133,11 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
             }
             System.out.println("🗑️ Decoration with ID " + id + " deleted successfully.");
         } catch (DecorationNotFoundException e) {
-            throw e; // Re-throw specific exception
+            throw e;
         } catch (SQLException e) {
             System.err.println("❌ Error al eliminar decoración con ID " + id + ": " + e.getMessage());
             e.printStackTrace();
-            throw e; // Re-throw other SQLExceptions
+            throw e;
         }
     }
 
@@ -160,14 +160,14 @@ public class DecorationDAOImplementation implements DecorationObjectDAO {
                 } catch (SQLException e) {
                     System.err.println("❌ Error al leer decoraciones por Room ID " + roomId + " del ResultSet: " + e.getMessage());
                     e.printStackTrace();
-                    throw new RuntimeException("Error processing ResultSet for Decorations by Room ID " + roomId, e); // Wrap and re-throw
+                    throw new RuntimeException("Error processing ResultSet for Decorations by Room ID " + roomId, e);
                 }
                 return decorations;
             }, roomId);
         } catch (SQLException e) {
             System.err.println("❌ Error al obtener decoraciones para Room ID " + roomId + ": " + e.getMessage());
             e.printStackTrace();
-            throw e; // Re-throw the SQLException from executeQuery
+            throw e;
         }
     }
 }
