@@ -133,7 +133,7 @@ DELETE, and SELECT statements, including handling generated keys for insertions.
 ## 🛠️ Setup Instructions
 ### Environment Configuration
 
-1. Create a .env file in the root directory of the project based on the template.env file:
+1. Clone the repository:
 ```
    git clone https://github.com/Resikrys/S3-03-Developers-Team.git
 ```
@@ -186,23 +186,23 @@ DELETE, and SELECT statements, including handling generated keys for insertions.
 
 ### MySQL Database
 MySQL stores the core entities of the application:
-- EscapeRooms: The main entity that contains basic information about each escape room
-- Rooms: Physical spaces within escape rooms
-- Decoration Objects: Items used to decorate rooms
-- Clue Objects: Challenges that users need to solve
-- Players: Information about users who make reservations
-- Tickets: Booking information for escape rooms
+- **EscapeRooms**: The main entity that contains basic information about each escape room
+- **Rooms**: Physical spaces within escape rooms
+- **Decoration Objects**: Items used to decorate rooms
+- **Clue Objects**: Challenges that users need to solve
+- **Players**: Information about users who make reservations
+- **Tickets**: Booking information for escape rooms
 
 ### MongoDB Database
 MongoDB is used for greeting users with certificates and special rewards:
-- Rewards: Special rewards given to players (contains playerName, scaperoomName,
+- **Rewards**: Special rewards given to players (contains playerName, scaperoomName,
   certificateMessage, specialRewardDetails and delivery date)
 
 This dual-database approach allows the application to leverage the strengths 
 of both database types:
-- MySQL provides strong consistency and relational integrity for the core 
+- **MySQL** provides strong consistency and relational integrity for the core 
 business data
-- MongoDB offers flexibility for storing document-based data like notifications 
+- **MongoDB** offers flexibility for storing document-based data like notifications 
 and rewards
 
 ## 🎯 Key Features
