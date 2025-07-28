@@ -21,7 +21,7 @@ public class InventoryService {
         this.clueDao = clueDao;
         this.decorationDao = decorationDao;
 }
-    // Mostrar resumen del inventario
+
     public void showInventorySummary() throws SQLException {
         List<Room> rooms = roomDao.getAllRooms();
         List<ClueObject> clues = clueDao.getAllClues();
@@ -35,7 +35,7 @@ public class InventoryService {
         double totalValue = calculateInventoryValue();
         System.out.printf("Total inventory value: %.2f €\n", totalValue);
     }
-    // Calcula el valor total del inventario
+
     public double calculateInventoryValue() throws SQLException {
         double total = 0;
 
@@ -49,7 +49,7 @@ public class InventoryService {
 
         return total;
     }
-    // Menú simplificado: solo muestra resumen
+
     public void showMenu(InputHelper scanner) {
         try {
             showInventorySummary();

@@ -13,7 +13,7 @@ import util.InputHelper;
 public class MainMenu {
     private final InputHelper inputHelper;
     private final EscapeRoomMenu escapeRoomMenu;
-    private final RoomMenu roomMenu; // Now it's RoomMenu, not RoomManager
+    private final RoomMenu roomMenu;
     private final ClueMenu clueMenu;
     private final DecorationMenu decorationMenu;
     private final PlayerMenu playerMenu;
@@ -21,14 +21,11 @@ public class MainMenu {
     private final RewardMenu rewardMenu;
     private final TicketMenu ticketMenu;
 
-//    private final Ticketmanager ticketManager;
 
     public MainMenu() {
         EnvLoader.getInstance();
-        // 2. Initialize database connections
-        // This connects to MySQL
+
         DatabaseConnection.getInstance();
-        // This connects to MongoDB
         MongoDBConnection.getDatabaseInstance();
 
         this.inputHelper = new InputHelper();
@@ -36,9 +33,9 @@ public class MainMenu {
         this.roomMenu  = new RoomMenu(inputHelper);
         this.clueMenu = new ClueMenu(inputHelper);
         this.decorationMenu = new DecorationMenu(inputHelper);
-        PlayerDao playerDao = new PlayerDaoImplementation(new SQLExecutor()); //!!
-        PlayerManager playerManager = new PlayerManager(playerDao, inputHelper); //!!
-        this.playerMenu = new PlayerMenu(playerManager, inputHelper); //!!
+        PlayerDao playerDao = new PlayerDaoImplementation(new SQLExecutor());
+        PlayerManager playerManager = new PlayerManager(playerDao, inputHelper);
+        this.playerMenu = new PlayerMenu(playerManager, inputHelper);
         this.ticketMenu = new TicketMenu(inputHelper);
         this.inventoryService = new InventoryService(
                 new RoomDaoImplementation(),

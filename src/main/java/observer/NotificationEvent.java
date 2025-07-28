@@ -2,9 +2,9 @@ package observer;
 
 public class NotificationEvent {
     private final EventType type;
-    private final String entityName; // e.g., "Room", "Decoration", "Clue"
-    private final int entityId;      // ID of the entity that changed
-    private final String description; // A human-readable description of the change
+    private final String entityName;
+    private final int entityId;
+    private final String description;
 
     public NotificationEvent(EventType type, String entityName, int entityId, String description) {
         this.type = type;

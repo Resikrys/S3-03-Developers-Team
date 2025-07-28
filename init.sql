@@ -29,10 +29,10 @@ CREATE TABLE Room (
 );
 
 INSERT INTO Room (theme, difficulty_level, escape_room_id) VALUES
-('Classic Horror', 8, 1), -- From The Haunted Mansion
-('Gothic Mistery', 7, 1), -- Of The Haunted Mansion
-('Post-Apocalyptic Survival', 9, 2), -- From the Secret Bunker
-('Retro SciFi', 6, 3), -- From the Abandoned Laboratory
+('Classic Horror', 8, 1),
+('Gothic Mistery', 7, 1),
+('Post-Apocalyptic Survival', 9, 2),
+('Retro SciFi', 6, 3),
 ('NULL Test Room', 5, NULL);
 
 CREATE TABLE DecorationObject (

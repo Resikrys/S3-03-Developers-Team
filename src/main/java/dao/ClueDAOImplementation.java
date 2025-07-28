@@ -14,17 +14,9 @@ public class ClueDAOImplementation implements ClueDao {
 
     private final SQLExecutor sqlExecutor;
 
-    // The constructor should receive SQLExecutor as a dependency.
-    // If you always create a new SQLExecutor here, it should be new SQLExecutor()
-    // but based on your MainMenu, it seems SQLExecutor is a singleton or managed.
-    // Let's assume you intend to create it here if not passed.
     public ClueDAOImplementation() { // Modified constructor for direct instantiation
         this.sqlExecutor = new SQLExecutor();
     }
-    // If you want to keep the constructor with parameter for testing/dependency injection:
-    // public ClueDAOImplementation(SQLExecutor sqlExecutor) {
-    //     this.sqlExecutor = sqlExecutor;
-    // }
 
     @Override
     public void createClue(ClueObject clueObject) throws SQLException {
@@ -35,12 +27,12 @@ public class ClueDAOImplementation implements ClueDao {
                     sql,
                     clueObject.getName(),
                     clueObject.getPrice(),
-                    clueObject.getMaterial().toString(), // Enums se pasan como String
+                    clueObject.getMaterial().toString(),
                     clueObject.getPuzzleDescription(),
                     clueObject.isSolved(),
                     clueObject.getRoomId()
             );
-            System.out.println("✅ Clue '" + clueObject.getName() + "' created successfully."); // Confirmation message
+            System.out.println("✅ Clue '" + clueObject.getName() + "' created successfully.");
         } catch (SQLException e) {
             System.err.println("❌ Error while creating clue '" + clueObject.getName() + "': " + e.getMessage());
             e.printStackTrace();
@@ -51,7 +43,7 @@ public class ClueDAOImplementation implements ClueDao {
     @Override
     public List<ClueObject> getAllClues() throws SQLException {
         String sql = "SELECT id, name, price, material, puzzle_description, solved, room_id FROM ClueObject";
-        try { // Added try-catch for the executeQuery itself
+        try {
             return sqlExecutor.executeQuery(sql, rs -> {
                 List<ClueObject> clues = new ArrayList<>();
                 try {
@@ -68,8 +60,7 @@ public class ClueDAOImplementation implements ClueDao {
                     }
                 } catch (SQLException e) {
                     System.err.println("❌ Error while processing clues: " + e.getMessage());
-                    e.printStackTrace(); // Added printStackTrace for debugging
-                    // It's generally better to re-throw a RuntimeException here if this is a critical parsing error
+                    e.printStackTrace();
                     throw new RuntimeException("Error processing ClueObject ResultSet", e);
                 }
                 return clues;
@@ -77,19 +68,19 @@ public class ClueDAOImplementation implements ClueDao {
         } catch (SQLException e) {
             System.err.println("❌ Error obtaining all clues: " + e.getMessage());
             e.printStackTrace();
-            throw e; // Re-throw if the initial query execution fails
+            throw e;
         }
     }
 
     @Override
-    public Optional<ClueObject> getClueById(int id) throws SQLException { // Changed return type to Optional
+    public Optional<ClueObject> getClueById(int id) throws SQLException {
         String sql = "SELECT id, name, price, material, puzzle_description, solved, room_id FROM ClueObject WHERE id = ?";
 
         try {
             return sqlExecutor.executeQuery(sql, rs -> {
                 try {
                     if (rs.next()) {
-                        return Optional.of(new ClueObject( // Wrap in Optional.of()
+                        return Optional.of(new ClueObject(
                                 rs.getInt("id"),
                                 rs.getString("name"),
                                 rs.getBigDecimal("price"),
@@ -99,11 +90,11 @@ public class ClueDAOImplementation implements ClueDao {
                                 rs.getInt("room_id")
                         ));
                     }
-                    return Optional.empty(); // Return Optional.empty() if not found
+                    return Optional.empty();
                 } catch (SQLException e) {
                     System.err.println("❌ Error reading clue with id " + id + " from ResultSet: " + e.getMessage());
                     e.printStackTrace();
-                    throw new RuntimeException("Error processing ClueObject ResultSet for ID " + id, e); // Wrap
+                    throw new RuntimeException("Error processing ClueObject ResultSet for ID " + id, e);
                 }
             }, id);
         } catch (SQLException e) {
@@ -114,7 +105,7 @@ public class ClueDAOImplementation implements ClueDao {
     }
 
     @Override
-    public void updateClue(ClueObject clue) throws SQLException, NotFoundException { // Added ClueNotFoundException
+    public void updateClue(ClueObject clue) throws SQLException, NotFoundException {
         String sql = "UPDATE ClueObject SET name = ?, price = ?, material = ?, puzzle_description = ?, solved = ?, room_id = ? WHERE id = ?";
 
         try {
@@ -130,12 +121,11 @@ public class ClueDAOImplementation implements ClueDao {
             );
 
             if (rowsAffected == 0) {
-                // If no rows affected, the clue was not found
                 throw new NotFoundException("Clue with id " + clue.getId() + " not found for update.");
             }
-            System.out.println("✅ Clue with id " + clue.getId() + " updated successfully."); // Confirmation message
+            System.out.println("✅ Clue with id " + clue.getId() + " updated successfully.");
 
-        } catch (NotFoundException e) { // Catch specific exception first
+        } catch (NotFoundException e) {
             throw e;
         } catch (SQLException e) {
             System.err.println("❌ Error updating clue with id " + clue.getId() + ": " + e.getMessage());
@@ -145,19 +135,18 @@ public class ClueDAOImplementation implements ClueDao {
     }
 
     @Override
-    public void deleteClue(int id) throws SQLException, NotFoundException { // Added ClueNotFoundException
+    public void deleteClue(int id) throws SQLException, NotFoundException {
         String sql = "DELETE FROM ClueObject WHERE id = ?";
 
         try {
             int rowsAffected = sqlExecutor.executeUpdate(sql, id);
 
             if (rowsAffected == 0) {
-                // If no rows affected, the clue was not found
                 throw new NotFoundException("Clue with id " + id + " not found for deletion.");
             }
-            System.out.println("✅ Clue with id " + id + " successfully deleted."); // Confirmation message
+            System.out.println("✅ Clue with id " + id + " successfully deleted.");
 
-        } catch (NotFoundException e) { // Catch specific exception first
+        } catch (NotFoundException e) {
             throw e;
         } catch (SQLException e) {
             System.err.println("❌ Error deleting clue with id " + id + ": " + e.getMessage());
@@ -167,7 +156,7 @@ public class ClueDAOImplementation implements ClueDao {
     }
 
     @Override
-    public void markClueAsSolved(int id) throws SQLException, NotFoundException { // Added ClueNotFoundException for consistency
+    public void markClueAsSolved(int id) throws SQLException, NotFoundException {
         String sql = "UPDATE ClueObject SET solved = true WHERE id = ?";
 
         try {
@@ -175,8 +164,8 @@ public class ClueDAOImplementation implements ClueDao {
             if (rowsAffected == 0) {
                 throw new NotFoundException("Clue with id " + id + " not found to mark as solved.");
             }
-            System.out.println("✅ Clue with id " + id + " marked as solved."); // Confirmation message
-        } catch (NotFoundException e) { // Catch specific exception first
+            System.out.println("✅ Clue with id " + id + " marked as solved.");
+        } catch (NotFoundException e) {
             throw e;
         } catch (SQLException e) {
             System.err.println("❌ Error marking clue with id " + id + " as solved: " + e.getMessage());
@@ -189,7 +178,7 @@ public class ClueDAOImplementation implements ClueDao {
     public List<ClueObject> getCluesByRoomId(int roomId) throws SQLException {
         String sql = "SELECT id, name, price, material, puzzle_description, solved, room_id FROM ClueObject WHERE room_id = ?";
 
-        try { // Added try-catch for the executeQuery itself
+        try {
             return sqlExecutor.executeQuery(sql, rs -> {
                 List<ClueObject> clues = new ArrayList<>();
                 try {
@@ -207,7 +196,7 @@ public class ClueDAOImplementation implements ClueDao {
                 } catch (SQLException e) {
                     System.err.println("❌ Error reading clues for room_id " + roomId + " from ResultSet: " + e.getMessage());
                     e.printStackTrace();
-                    throw new RuntimeException("Error processing ClueObject ResultSet for Room ID " + roomId, e); // Wrap
+                    throw new RuntimeException("Error processing ClueObject ResultSet for Room ID " + roomId, e);
                 }
                 return clues;
             }, roomId);

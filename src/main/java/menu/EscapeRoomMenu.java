@@ -13,7 +13,7 @@ public class EscapeRoomMenu {
 
     public EscapeRoomMenu(InputHelper inputHelper) {
         this.inputHelper = inputHelper;
-        this.escaperoomManager = new EscapeRoomManager(inputHelper); // RoomManager still needs InputHelper
+        this.escaperoomManager = new EscapeRoomManager(inputHelper);
     }
 
     public void showMenu() {
@@ -52,19 +52,15 @@ public class EscapeRoomMenu {
                         System.out.println("Invalid option. Please try again.");
                 }
             } catch (InvalidInputException e) {
-                // Atrapa errores de formato de entrada del usuario (ej. texto donde se espera número)
                 System.err.println("Input error: " + e.getMessage() + ". Please try again.");
             } catch (EscapeRoomNotFoundException e) {
-                // Atrapa errores lógicos de negocio (ej. no se encuentra la entidad)
                 System.err.println("Operation error: " + e.getMessage());
             } catch (SQLException e) {
-                // Atrapa errores técnicos de la base de datos
                 System.err.println("Database error during Escape Room operation: " + e.getMessage());
-                e.printStackTrace(); // Para depuración
+                e.printStackTrace();
             } catch (Exception e) {
-                // Captura cualquier otra excepción inesperada
                 System.err.println("An unexpected error occurred during Escape Room operation: " + e.getMessage());
-                e.printStackTrace(); // Para depuración
+                e.printStackTrace();
             }
         } while (choice != 0);
     }

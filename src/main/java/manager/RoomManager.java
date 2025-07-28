@@ -6,8 +6,8 @@ import exception.InvalidInputException;
 import exception.RoomNotFoundException;
 import model.Room;
 import util.InputHelper;
-import observer.NotificationService; // <-- NEW IMPORT
-import observer.NotificationEvent;   // <-- NEW IMPORT
+import observer.NotificationService;
+import observer.NotificationEvent;  
 import observer.EventType;
 
 import java.sql.SQLException;
@@ -62,7 +62,7 @@ public class RoomManager {
 
         if (roomToUpdateOptional.isPresent()) {
             Room roomToUpdate = roomToUpdateOptional.get();
-            String oldTheme = roomToUpdate.getTheme(); // Get old theme for notification
+            String oldTheme = roomToUpdate.getTheme();
 
             String newTheme = inputHelper.readString("New theme (actual: " + roomToUpdate.getTheme() + "): ");
             int newDifficulty = inputHelper.readInt("New difficulty level (actual: " + roomToUpdate.getDifficultyLevel() + "): ");
@@ -78,7 +78,7 @@ public class RoomManager {
             roomDao.updateRoom(roomToUpdate);
             System.out.println("Room updated successfully!");
 
-            String updatedDescription = oldTheme + " -> " + newTheme; // More descriptive update event
+            String updatedDescription = oldTheme + " -> " + newTheme;
             NotificationService.getInstance().notifyObservers(
                     new NotificationEvent(EventType.ROOM_UPDATED, "Room", roomToUpdate.getId(), updatedDescription)
             );
@@ -89,7 +89,6 @@ public class RoomManager {
 
     public void deleteRoom() throws SQLException, RoomNotFoundException {
         int idDelete = inputHelper.readInt("ID of the Room to be deleted: ");
-        // Get room details BEFORE deleting for the notification
         Optional<Room> roomToDeleteOptional = roomDao.getRoomById(idDelete);
         roomDao.deleteRoom(idDelete);
         System.out.println("Room deleted successfully!");

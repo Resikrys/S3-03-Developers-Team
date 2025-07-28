@@ -45,7 +45,6 @@ public class InputHelper {
         }
     }
 
-    // Lee un BigDecimal desde consola
     public BigDecimal readBigDecimal(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -58,7 +57,6 @@ public class InputHelper {
         }
     }
 
-    // Lee un valor booleano (true/false) desde consola
     public boolean readBoolean(String prompt) {
         while (true) {
             System.out.print(prompt + " (true/false): ");
@@ -71,7 +69,6 @@ public class InputHelper {
         }
     }
 
-    // Muestra opciones del enum y permite seleccionar una
     public <T extends Enum<T>> T readEnum(Class<T> enumType, String prompt) {
         System.out.println(prompt);
         T[] constants = enumType.getEnumConstants();
@@ -87,10 +84,10 @@ public class InputHelper {
         }
     }
 
-    public double readDouble(String prompt) { // Eliminar 'static'
+    public double readDouble(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine(); // Usar la instancia de scanner
+            String input = scanner.nextLine();
             try {
                 return Double.parseDouble(input);
             } catch (NumberFormatException e) {

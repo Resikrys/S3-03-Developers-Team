@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ClueMenu {
     private final ClueManager clueManager;
-    private final InputHelper inputHelper; // Renamed 'scanner' to 'inputHelper' for consistency
+    private final InputHelper inputHelper;
 
     public ClueMenu(InputHelper inputHelper) {
         this.clueManager = new ClueManager(inputHelper);
@@ -26,7 +26,7 @@ public class ClueMenu {
                 handleChoice(choice);
             } catch (InvalidInputException e) {
                 System.err.println("❌ Input error: " + e.getMessage() + ". Please try again.");
-            } catch (NotFoundException e) { // New catch block for ClueNotFoundException
+            } catch (NotFoundException e) {
                 System.err.println("❌ Operation error: " + e.getMessage());
             } catch (SQLException e) {
                 System.err.println("❌ Database error: " + e.getMessage());
@@ -48,10 +48,10 @@ public class ClueMenu {
         System.out.println("5. Search clue by ID");
         System.out.println("6. List clues by Room ID");
         System.out.println("0. Back to main menu");
-        System.out.print("Select an option: "); // Added prompt to the menu itself for clarity
+        System.out.print("Select an option: ");
     }
 
-    private void handleChoice(int choice) throws SQLException, NotFoundException { // Declares exceptions
+    private void handleChoice(int choice) throws SQLException, NotFoundException {
         switch (choice) {
             case 1 -> clueManager.createClue();
             case 2 -> clueManager.listAllClues();
